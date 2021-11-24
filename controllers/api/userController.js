@@ -8,19 +8,33 @@ require("dotenv").config();
 
 //Create New User
 router.post("/signup", (req, res) => {
-  User.create({
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email.toLowerCase(),
-    image_content: req.body.image_content,
-  })
-    .then((newUser) => {
-      res.json(newUser);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ err });
-    });
+  User.findOne({
+    where: {
+      email: req.body.email
+    }
+  }).then((foundUser)=>{
+    if(foundUser) {
+      res.status(403).send("user already exists please login")
+    } else {
+      User.create({
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email.toLowerCase(),
+        image_content: req.body.image_content,
+      })
+        .then((newUser) => {
+          res.json(newUser);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).json({ err });
+        });
+      
+    }
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).json({ err });
+  });
 });
 
 //log a user in
