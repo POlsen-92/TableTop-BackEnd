@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { Comment, Blog, User} = require('../../models');
 
-// The `http://localhost:3000/api/comments` endpoint
+// The `http://localhost:3001/api/comment` endpoint
 
 // create a new Comment 
 router.post('/', async (req, res) => {
