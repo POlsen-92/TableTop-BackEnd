@@ -73,25 +73,25 @@ router.post("/login", (req, res) => {
   });
 });
 
-// // GET ALL USERS - UNCOMMENT IF YOU WANT TO CHECK ALL USERS IN INSOMNIA
-// router.get("/", (req, res) => {
-//   User.findAll({
-//     include: [Campaign, Character, Blog, Comment],
-//   })
-//     .then((dbUsers) => {
-//       if (dbUsers.length) {
-//         res.json(dbUsers);
-//       } else {
-//         res.status(404).json({ err: "No users found!" });
-//       }
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500).json({ err: "an error occurred" });
-//     });
-// });
+// // GET ALL USERS 
+router.get("/all", (req, res) => {
+  User.findAll({
+    include: [Campaign, Character, Blog, Comment],
+  })
+    .then((dbUsers) => {
+      if (dbUsers.length) {
+        res.json(dbUsers);
+      } else {
+        res.status(404).json({ err: "No users found!" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ err: "an error occurred" });
+    });
+});
 
-// FIND A SINGLE USER USING LOGIN CREDENTIALS
+// FIND A SINGLE USER USING LOGIN CREDENTIALS - ALL
 router.get("/", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.user.id, {
@@ -106,6 +106,39 @@ router.get("/", tokenAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// FIND A SINGLE USER USING LOGIN CREDENTIALS - GAME
+router.get("/game", tokenAuth, async (req, res) => {
+  try {
+    const userData = await User.findByPk(req.user.id, {
+      include: [Campaign, Character ],
+    });
+    if (!userData) {
+      res.status(404).json({ message: "No User found with that id!" });
+      return;
+    }
+    res.status(200).json(userData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// FIND A SINGLE USER USING LOGIN CREDENTIALS - FORUM
+router.get("/forum", tokenAuth, async (req, res) => {
+  try {
+    const userData = await User.findByPk(req.user.id, {
+      include: [Blog, Comment],
+    });
+    if (!userData) {
+      res.status(404).json({ message: "No User found with that id!" });
+      return;
+    }
+    res.status(200).json(userData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 // FIND A SINGLE USER PROFILE USING LOGIN CREDENTIALS
 router.get("/profile", tokenAuth, (req, res) => {
@@ -153,57 +186,5 @@ router.delete("/", tokenAuth, (req, res) => {
   });
 });
 
-
-//******* routes above are corrected to current way of doing things
-
-
-
-// // FIND USER BY ID - ALL
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const userData = await User.findByPk(req.params.id, {
-//       include: [Campaign, Character, Blog, Comment],
-//     });
-//     if (!userData) {
-//       res.status(404).json({ message: "No User found with that id!" });
-//       return;
-//     }
-//     res.status(200).json(userData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
-// // FIND USER BY ID - GAME
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const userData = await User.findByPk(req.params.id, {
-//       include: [Campaign, Character],
-//     });
-//     if (!userData) {
-//       res.status(404).json({ message: "No User found with that id!" });
-//       return;
-//     }
-//     res.status(200).json(userData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
-// // FIND USER BY ID - COMMUNITY
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const userData = await User.findByPk(req.params.id, {
-//       include: [Blog, Comment],
-//     });
-//     if (!userData) {
-//       res.status(404).json({ message: "No User found with that id!" });
-//       return;
-//     }
-//     res.status(200).json(userData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
 
 module.exports = router;

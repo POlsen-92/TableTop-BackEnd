@@ -12,6 +12,9 @@ router.use("/blog",blogRoutes);
 const campaignRoutes = require("./campaignController");
 router.use("/campaign",campaignRoutes);
 
+const usercampaignRoutes = require("./usercampaignController");
+router.use("/usercampaign",usercampaignRoutes);
+
 const characterRoutes = require("./characterController");
 router.use("/character",characterRoutes);
 
