@@ -21,7 +21,7 @@ router.post('/', tokenAuth,  async (req, res) => {
 });
 
 // GET ALL CAMPAIGNS
-router.get('/', async (req, res) => {
+router.get('/all', async (req, res) => {
   try {
     const campaignData = await Campaign.findAll({
       include: [User, Character],
@@ -32,7 +32,39 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET A SINGLE CAMPAIGN
+// GET ALL CAMPAIGNS FROM ONE GM
+router.get('/gm', tokenAuth, async (req, res) => {
+  try {
+    const campaignData = await Campaign.findAll({
+      where: {
+        gm_id: req.user.id
+      },
+      include: [User, Character],
+    });
+    res.status(200).json(campaignData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// GET ALL CAMPAIGNS FROM ONE USER 
+// TODO: Not so sure about how to do this one
+// router.get('/user/:id', async (req, res) => {
+//   try {
+//     const campaignData = await Campaign.findAll({
+//       where: {
+//         user_id: req.params.id
+//       },
+//       include: [User, Character],
+//     });
+//     res.status(200).json(campaignData);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+
+
+// FIND ONE CAMPAIGN
 router.get('/:id', async (req, res) => {
   try {
     const campaignData = await Campaign.findByPk(req.params.id, {
@@ -40,7 +72,7 @@ router.get('/:id', async (req, res) => {
     });
 
     if (!campaignData) {
-      res.status(404).json({ message: 'No Character found with that id!' });
+      res.status(404).json({ message: 'No Campaign found with that id!' });
       return;
     }
 
@@ -49,12 +81,6 @@ router.get('/:id', async (req, res) => {
     res.status(500).json(err);
   }
 });
-
-// GET ALL CAMPAIGNS WITH A SINGLE GM
-
-
-// GET ALL CAMPAIGNS WITH ONE USER
-
 
 //UPDATE CAMPAIGN 
 router.put('/:id', async (req, res) => {
