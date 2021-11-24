@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const { Blog, User, Comment} = require('../../models');
+const tokenAuth = require("../../middleware/tokenAuth");
 
-// The `http://localhost:3000/api/blogs` endpoint
+// The `http://localhost:3000/api/blog` endpoint
 
 // create a new Blog  
-
 
 // find all Blogs. be sure to include its associated User and Comments
 router.get('/', async (req, res) => {
@@ -38,12 +38,12 @@ router.get('/:id', async (req, res) => {
 });
 
 // update a Blog by its `id` value 
-router.put('/:id', async (req, res) => {
+router.put('/:id', tokenAuth, async (req, res) => {
   try {
     const blogData = await Blog.update(req.body, {
       where: {
         id: req.params.id,
-        user_id: req.session.user.id
+        user_id: req.user.id
       },
     });
     if (!blogData[0]) {
@@ -57,12 +57,12 @@ router.put('/:id', async (req, res) => {
 });
 
 // delete a Blog by its `id` value 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', tokenAuth, async (req, res) => {
   try {
     const blogData = await Blog.destroy({
       where: {
         id: req.params.id,
-        user_id: req.session.user.id
+        user_id: req.user.id
       },
     });
     if (!blogData) {
@@ -74,18 +74,19 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 router.post('/:id', async (req, res) => {
   try {
-      const blogData = await Blog.create({
-        title: req.body.title,
-        description: req.body.description,
-        UserId: req.params.id
-      })
-      res.status(200).json(blogData)
-    } catch(err) {
-        console.log(err);
-        res.status(400).json({ message: "an error occured", err: err });
-      };
-  });
+    const blogData = await Blog.create({
+      title: req.body.title,
+      description: req.body.description,
+      UserId: req.params.id
+    })
+    res.status(200).json(blogData)
+  } catch(err) {
+    console.log(err);
+    res.status(400).json({ message: "an error occured", err: err });
+  };
+});
 
 module.exports = router;

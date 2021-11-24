@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const tokenAuth = require("../../middleware/tokenAuth");
 require("dotenv").config();
 
+// The `http://localhost:3000/api/user` endpoint
+
 //Create New User
 router.post("/signup", (req, res) => {
   User.findOne({
@@ -29,7 +31,6 @@ router.post("/signup", (req, res) => {
           console.log(err);
           res.status(500).json({ err });
         });
-      
     }
   }).catch((err) => {
     console.log(err);
@@ -44,32 +45,32 @@ router.post("/login", (req, res) => {
       email: req.body.email,
     },
   })
-    .then((foundUser) => {
-      if (!foundUser) {
-        res.status(401).send("incorrect email or password");
-      } else if (bcrypt.compareSync(req.body.password, foundUser.password)) {
-        const token = jwt.sign(
-          {
-            email: foundUser.email,
-            id: foundUser.id,
-          },
-          process.env.TOKEN_KEY,
-          {
-            expiresIn: "2h",
-          }
-        );
-        res.json({
-          token: token,
-          user: foundUser,
-        });
-      } else {
-        res.status(401).send("incorrect email or password");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ err });
-    });
+  .then((foundUser) => {
+    if (!foundUser) {
+      res.status(401).send("incorrect email or password");
+    } else if (bcrypt.compareSync(req.body.password, foundUser.password)) {
+      const token = jwt.sign(
+        {
+          email: foundUser.email,
+          id: foundUser.id,
+        },
+        process.env.TOKEN_KEY,
+        {
+          expiresIn: "2h",
+        }
+      );
+      res.json({
+        token: token,
+        user: foundUser,
+      });
+    } else {
+      res.status(401).send("incorrect email or password");
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err });
+  });
 });
 
 // FIND A SINGLE USER USING LOGIN CREDENTIALS
@@ -80,19 +81,19 @@ router.get("/profile", tokenAuth, (req, res) => {
 });
 
 router.get("/", tokenAuth, async (req, res) => {
-    try {
-      const userData = await User.findByPk(req.user.id, {
-        include: [Campaign, Character],
-      });
-      if (!userData) {
-        res.status(404).json({ message: "No User found with that id!" });
-        return;
-      }
-      res.status(200).json(userData);
-    } catch (err) {
-      res.status(500).json(err);
+  try {
+    const userData = await User.findByPk(req.user.id, {
+      include: [Campaign, Character],
+    });
+    if (!userData) {
+      res.status(404).json({ message: "No User found with that id!" });
+      return;
     }
-  });
+    res.status(200).json(userData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 //delete a user
 router.delete("/", tokenAuth, (req, res) => {
@@ -101,17 +102,17 @@ router.delete("/", tokenAuth, (req, res) => {
       id: req.user.id,
     },
   })
-    .then((delUser) => {
-      if (delUser) {
-        res.json(delUser);
-      } else {
-        res.status(404).json({ err: "no user found" });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ err: "an error occurred" });
-    });
+  .then((delUser) => {
+    if (delUser) {
+      res.json(delUser);
+    } else {
+      res.status(404).json({ err: "no user found" });
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err: "an error occurred" });
+  });
 });
 
 // FIND USER BY ID - AND UPDATE
@@ -132,11 +133,7 @@ router.put("/update", tokenAuth, async (req, res) => {
 });
 
 
-//************** routes above are corrected to current way of doing things
-
-
-
-
+//******* routes above are corrected to current way of doing things
 
 // //get all users
 // router.get("/", (req, res) => {
