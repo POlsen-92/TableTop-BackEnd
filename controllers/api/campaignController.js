@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { Blog, User, Comment, Campaign, Character } = require('../../models');
 const tokenAuth = require("../../middleware/tokenAuth");
 
-// The `http://localhost:3000/api/campaign` endpoint
+// The `http://localhost:3001/api/campaign` endpoint
 
 //CREATE CAMPAIGN
 router.post('/', tokenAuth,  async (req, res) => {
@@ -74,7 +74,7 @@ router.delete('/:id', tokenAuth, async (req, res) => {
     const campaignData = await Campaign.destroy({
       where: {
         id: req.params.id,
-        user_id: req.user.id 
+        gm_id: req.user.id 
       },
     });
     if (!campaignData) {

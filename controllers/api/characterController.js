@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { Character, User, Campaign} = require('../../models');
 const tokenAuth = require("../../middleware/tokenAuth");
 
-// The `http://localhost:3000/api/character` endpoint
+// The `http://localhost:3001/api/character` endpoint
 
 //CREATE CHARACTER
 router.post('/', tokenAuth, async (req, res) => {

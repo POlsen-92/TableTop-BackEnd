@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const { User, Campaign, Character, Blog, Comment } = require("../../models");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const tokenAuth = require("../../middleware/tokenAuth");
+const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-// The `http://localhost:3000/api/user` endpoint
+// The `http://localhost:3001/api/user` endpoint
 
-//Create New User
+// CREATE A NEW USER
 router.post("/signup", (req, res) => {
   User.findOne({
     where: {
@@ -38,7 +38,7 @@ router.post("/signup", (req, res) => {
   });
 });
 
-//log a user in
+// LOGIN USER - GET TOKEN
 router.post("/login", (req, res) => {
   User.findOne({
     where: {
@@ -73,17 +73,29 @@ router.post("/login", (req, res) => {
   });
 });
 
-// FIND A SINGLE USER USING LOGIN CREDENTIALS
-router.get("/profile", tokenAuth, (req, res) => {
-  User.findByPk(req.user.id).then((foundUser) => {
-    res.json(foundUser);
-  });
-});
+// // GET ALL USERS - UNCOMMENT IF YOU WANT TO CHECK ALL USERS IN INSOMNIA
+// router.get("/", (req, res) => {
+//   User.findAll({
+//     include: [Campaign, Character, Blog, Comment],
+//   })
+//     .then((dbUsers) => {
+//       if (dbUsers.length) {
+//         res.json(dbUsers);
+//       } else {
+//         res.status(404).json({ err: "No users found!" });
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).json({ err: "an error occurred" });
+//     });
+// });
 
+// FIND A SINGLE USER USING LOGIN CREDENTIALS
 router.get("/", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.user.id, {
-      include: [Campaign, Character],
+      include: [Campaign, Character, Blog, Comment],
     });
     if (!userData) {
       res.status(404).json({ message: "No User found with that id!" });
@@ -95,7 +107,33 @@ router.get("/", tokenAuth, async (req, res) => {
   }
 });
 
-//delete a user
+// FIND A SINGLE USER PROFILE USING LOGIN CREDENTIALS
+router.get("/profile", tokenAuth, (req, res) => {
+  User.findByPk(req.user.id).then((foundUser) => {
+    res.json(foundUser);
+  });
+});
+
+// FIND USER BY ID - AND UPDATE
+router.put("/update", tokenAuth, async (req, res) => {
+  try {
+    const userData = await User.findByPk(req.user.id);
+    if (!userData) {
+      res.status(404).json({ message: "No User found with that id!" });
+      return;
+    }
+    const updateUser = await User.update(req.body, {
+      where: { id: req.user.id },
+      individualHooks: true
+    });
+    res.status(200).json(updateUser);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+// DELETE A USER USING LOGIN CREDENTIALS
 router.delete("/", tokenAuth, (req, res) => {
   User.destroy({
     where: {
@@ -115,41 +153,10 @@ router.delete("/", tokenAuth, (req, res) => {
   });
 });
 
-// FIND USER BY ID - AND UPDATE
-router.put("/update", tokenAuth, async (req, res) => {
-  try {
-    const userData = await User.findByPk(req.user.id);
-    if (!userData) {
-      res.status(404).json({ message: "No User found with that id!" });
-      return;
-    }
-    const updateUser = await User.update(req.body, {
-      where: { id: req.user.id },
-    });
-    res.status(200).json(updateUser);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
 
 //******* routes above are corrected to current way of doing things
 
-// //get all users
-// router.get("/", (req, res) => {
-//   User.findAll()
-//     .then((dbUsers) => {
-//       if (dbUsers.length) {
-//         res.json(dbUsers);
-//       } else {
-//         res.status(404).json({ err: "No users found!" });
-//       }
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500).json({ err: "an error occurred" });
-//     });
-// });
+
 
 // // FIND USER BY ID - ALL
 // router.get("/:id", async (req, res) => {
