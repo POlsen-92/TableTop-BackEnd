@@ -61,8 +61,8 @@ router.delete('/:id', tokenAuth, async (req, res) => {
   try {
     const blogData = await Blog.destroy({
       where: {
-        id: req.params.id,
-        user_id: req.user.id
+        id: req.params.id
+        // user_id: req.user.id
       },
     });
     if (!blogData) {
