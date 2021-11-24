@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const { User, Campaign, Character, Blog, Comment } = require("../../models");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const tokenAuth = require("../../middleware/tokenAuth");
+const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-//Create New User
+// The `http://localhost:3001/api/user` endpoint
+
+// CREATE A NEW USER
 router.post("/signup", (req, res) => {
   User.findOne({
     where: {
@@ -29,7 +31,6 @@ router.post("/signup", (req, res) => {
           console.log(err);
           res.status(500).json({ err });
         });
-      
     }
   }).catch((err) => {
     console.log(err);
@@ -37,110 +38,46 @@ router.post("/signup", (req, res) => {
   });
 });
 
-//log a user in
+// LOGIN USER - GET TOKEN
 router.post("/login", (req, res) => {
   User.findOne({
     where: {
       email: req.body.email,
     },
   })
-    .then((foundUser) => {
-      if (!foundUser) {
-        res.status(401).send("incorrect email or password");
-      } else if (bcrypt.compareSync(req.body.password, foundUser.password)) {
-        const token = jwt.sign(
-          {
-            email: foundUser.email,
-            id: foundUser.id,
-          },
-          process.env.TOKEN_KEY,
-          {
-            expiresIn: "2h",
-          }
-        );
-        res.json({
-          token: token,
-          user: foundUser,
-        });
-      } else {
-        res.status(401).send("incorrect email or password");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ err });
-    });
-});
-
-// FIND A SINGLE USER USING LOGIN CREDENTIALS
-router.get("/profile", tokenAuth, (req, res) => {
-  User.findByPk(req.user.id).then((foundUser) => {
-    res.json(foundUser);
-  });
-});
-
-router.get("/", tokenAuth, async (req, res) => {
-    try {
-      const userData = await User.findByPk(req.user.id, {
-        include: [Campaign, Character],
+  .then((foundUser) => {
+    if (!foundUser) {
+      res.status(401).send("incorrect email or password");
+    } else if (bcrypt.compareSync(req.body.password, foundUser.password)) {
+      const token = jwt.sign(
+        {
+          email: foundUser.email,
+          id: foundUser.id,
+        },
+        process.env.TOKEN_KEY,
+        {
+          expiresIn: "2h",
+        }
+      );
+      res.json({
+        token: token,
+        user: foundUser,
       });
-      if (!userData) {
-        res.status(404).json({ message: "No User found with that id!" });
-        return;
-      }
-      res.status(200).json(userData);
-    } catch (err) {
-      res.status(500).json(err);
+    } else {
+      res.status(401).send("incorrect email or password");
     }
-  });
-
-//delete a user
-router.delete("/", tokenAuth, (req, res) => {
-  User.destroy({
-    where: {
-      id: req.user.id,
-    },
   })
-    .then((delUser) => {
-      if (delUser) {
-        res.json(delUser);
-      } else {
-        res.status(404).json({ err: "no user found" });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ err: "an error occurred" });
-    });
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err });
+  });
 });
 
-// FIND USER BY ID - AND UPDATE
-router.put("/update", tokenAuth, async (req, res) => {
-  try {
-    const userData = await User.findByPk(req.user.id);
-    if (!userData) {
-      res.status(404).json({ message: "No User found with that id!" });
-      return;
-    }
-    const updateUser = await User.update(req.body, {
-      where: { id: req.user.id },
-    });
-    res.status(200).json(updateUser);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-
-//************** routes above are corrected to current way of doing things
-
-
-
-
-
-// //get all users
+// // GET ALL USERS - UNCOMMENT IF YOU WANT TO CHECK ALL USERS IN INSOMNIA
 // router.get("/", (req, res) => {
-//   User.findAll()
+//   User.findAll({
+//     include: [Campaign, Character, Blog, Comment],
+//   })
 //     .then((dbUsers) => {
 //       if (dbUsers.length) {
 //         res.json(dbUsers);
@@ -153,6 +90,73 @@ router.put("/update", tokenAuth, async (req, res) => {
 //       res.status(500).json({ err: "an error occurred" });
 //     });
 // });
+
+// FIND A SINGLE USER USING LOGIN CREDENTIALS
+router.get("/", tokenAuth, async (req, res) => {
+  try {
+    const userData = await User.findByPk(req.user.id, {
+      include: [Campaign, Character, Blog, Comment],
+    });
+    if (!userData) {
+      res.status(404).json({ message: "No User found with that id!" });
+      return;
+    }
+    res.status(200).json(userData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// FIND A SINGLE USER PROFILE USING LOGIN CREDENTIALS
+router.get("/profile", tokenAuth, (req, res) => {
+  User.findByPk(req.user.id).then((foundUser) => {
+    res.json(foundUser);
+  });
+});
+
+// FIND USER BY ID - AND UPDATE
+router.put("/update", tokenAuth, async (req, res) => {
+  try {
+    const userData = await User.findByPk(req.user.id);
+    if (!userData) {
+      res.status(404).json({ message: "No User found with that id!" });
+      return;
+    }
+    const updateUser = await User.update(req.body, {
+      where: { id: req.user.id },
+      individualHooks: true
+    });
+    res.status(200).json(updateUser);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+// DELETE A USER USING LOGIN CREDENTIALS
+router.delete("/", tokenAuth, (req, res) => {
+  User.destroy({
+    where: {
+      id: req.user.id,
+    },
+  })
+  .then((delUser) => {
+    if (delUser) {
+      res.json(delUser);
+    } else {
+      res.status(404).json({ err: "no user found" });
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err: "an error occurred" });
+  });
+});
+
+
+//******* routes above are corrected to current way of doing things
+
+
 
 // // FIND USER BY ID - ALL
 // router.get("/:id", async (req, res) => {
