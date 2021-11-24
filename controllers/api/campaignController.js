@@ -20,7 +20,7 @@ router.post('/', tokenAuth,  async (req, res) => {
     };
 });
 
-//READ CAMPAIGN
+// GET ALL CAMPAIGNS
 router.get('/', async (req, res) => {
   try {
     const campaignData = await Campaign.findAll({
@@ -32,6 +32,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET A SINGLE CAMPAIGN
 router.get('/:id', async (req, res) => {
   try {
     const campaignData = await Campaign.findByPk(req.params.id, {
@@ -48,6 +49,12 @@ router.get('/:id', async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// GET ALL CAMPAIGNS WITH A SINGLE GM
+
+
+// GET ALL CAMPAIGNS WITH ONE USER
+
 
 //UPDATE CAMPAIGN 
 router.put('/:id', async (req, res) => {
