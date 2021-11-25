@@ -4,7 +4,7 @@ const { Comment, Blog, User} = require('../../models');
 // The `http://localhost:3001/api/comment` endpoint
 
 // create a new Comment 
-router.post('/', async (req, res) => {
+router.post('/', tokenAuth, async (req, res) => {
   try {
     const commentData = await Comment.create({
       name: req.session.user.name,
