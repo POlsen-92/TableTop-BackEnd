@@ -12,6 +12,9 @@ router.use("/campaign",campaignRoutes);
 const characterRoutes = require("./characterController");
 router.use("/character",characterRoutes);
 
+const inventoryRoutes = require("./inventoryController");
+router.use("/inventory",inventoryRoutes);
+
 const usercampaignRoutes = require("./usercampaignController");
 router.use("/usercampaign",usercampaignRoutes);
 

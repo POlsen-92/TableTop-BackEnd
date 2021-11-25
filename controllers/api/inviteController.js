@@ -1,6 +1,6 @@
+const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite } = require("../../models");
 const express = require("express");
 const router = express.Router();
-const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite } = require("../../models");
 const jwt = require("jsonwebtoken");
 const tokenAuth = require("../../middleware/tokenAuth");
 const bcrypt = require("bcrypt");
@@ -27,13 +27,13 @@ router.get("/all", (req, res) => {
   // GET ALL INVITES FOR ONE USER
 router.get('/user/:id', async (req, res) => {
   try {
-    const campaignData = await Campaign.findAll({
+    const inviteData = await Invite.findAll({
       where: {
         user_id: req.params.id
       },
-      include: [User, Character],
+      include: [ Campaign ],
     });
-    res.status(200).json(campaignData);
+    res.status(200).json(inviteData);
   } catch (err) {
     res.status(500).json(err);
   }
