@@ -24,4 +24,7 @@ router.use("/blog",blogRoutes);
 const commentRoutes = require("./commentController");
 router.use("/comment",commentRoutes);
 
+const inviteRoutes = require("./inviteController");
+router.use("/invite",inviteRoutes);
+
 module.exports = router;

@@ -15,6 +15,10 @@ Campaign.init(
         },
         image_content: {
             type: DataTypes.STRING
+        },
+        description: {
+            type: DataTypes.TEXT,
+            allowNull: true
         }
     },
     {
