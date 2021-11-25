@@ -6,17 +6,23 @@ const router = express.Router();
 const userRoutes = require("./userController");
 router.use("/user",userRoutes);
 
-const blogRoutes = require("./blogController");
-router.use("/blog",blogRoutes);
-
 const campaignRoutes = require("./campaignController");
 router.use("/campaign",campaignRoutes);
+
+const characterRoutes = require("./characterController");
+router.use("/character",characterRoutes);
+
+const inventoryRoutes = require("./inventoryController");
+router.use("/inventory",inventoryRoutes);
 
 const usercampaignRoutes = require("./usercampaignController");
 router.use("/usercampaign",usercampaignRoutes);
 
-const characterRoutes = require("./characterController");
-router.use("/character",characterRoutes);
+const inviteRoutes = require("./inviteController");
+router.use("/invite",inviteRoutes);
+
+const blogRoutes = require("./blogController");
+router.use("/blog",blogRoutes);
 
 const commentRoutes = require("./commentController");
 router.use("/comment",commentRoutes);

@@ -12,6 +12,11 @@ const seedCampaign = async () => {
           gm_id:1,
           description: "The GREATEST EVER"
         },
+        {
+          name: "The Walking Dead",
+          gm_id:3,
+          description: "CAAAARRRLLLL"
+        }
       ]);
 };
 

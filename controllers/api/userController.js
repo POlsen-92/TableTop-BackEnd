@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Campaign, Character, Blog, Comment, Invite } = require("../../models");
+const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory } = require("../../models");
 const jwt = require("jsonwebtoken");
 const tokenAuth = require("../../middleware/tokenAuth");
 const bcrypt = require("bcrypt");
