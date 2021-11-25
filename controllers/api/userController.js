@@ -108,8 +108,24 @@ router.get("/", tokenAuth, async (req, res) => {
   }
 });
 
+// FIND A SINGLE USER USING ID
+router.get("/id:id", tokenAuth, async (req, res) => {
+  try {
+    const userData = await User.findOne({
+      where: {id:req.params.id},
+    });
+    if (!userData) {
+      res.status(404).json({ message: "No User found with that ID!" });
+      return;
+    }
+    res.status(200).json(userData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // FIND A SINGLE USER USING EMAIL
-router.get("/:email", tokenAuth, async (req, res) => {
+router.get("/email:email", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findOne({
       where: {email:req.params.email},
@@ -130,11 +146,16 @@ router.get("/game", tokenAuth, async (req, res) => {
     const userData = await User.findByPk(req.user.id, {
       include: [Campaign, Character ],
     });
+    const campaignData = await Campaign.findAll({
+      where: {
+        gm_id: req.user.id
+      }
+    });
     if (!userData) {
       res.status(404).json({ message: "No User found with that id!" });
       return;
     }
-    res.status(200).json(userData);
+    res.status(200).json([userData, campaignData]);
   } catch (err) {
     res.status(500).json(err);
   }

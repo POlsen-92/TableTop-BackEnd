@@ -10,7 +10,7 @@ router.post('/', tokenAuth, async (req, res) => {
     const characterData = await Character.create({
       name: req.body.name,
       user_id: req.user.id, 
-      campaign_id: req.body.campaign.id, //not sure about this one
+      campaign_id: req.body.campaign_id, //not sure about this one
       race: req.body.race,
       class: req.body.class,
       picture: req.body.picture

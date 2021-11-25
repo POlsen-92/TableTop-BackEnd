@@ -9,11 +9,15 @@ router.post('/', tokenAuth,  async (req, res) => {
   try {
     const campaignData = await Campaign.create({
       name: req.body.name,
-      gm_id: req.user.id, 
+      gm_id: req.user.id,
       description: req.body.description,
       picture: ""
     })
-    res.status(200).json(campaignData)
+    const usercampaignData = await UserCampaign.create({
+      campaign_id: campaignData.id,
+      user_id: req.user.id
+    })
+    res.status(200).json([campaignData, usercampaignData])
   } catch(err) {
       console.log(err);
       res.status(400).json({ message: "an error occured", err: err });
@@ -47,35 +51,16 @@ router.get('/gm', tokenAuth, async (req, res) => {
   }
 });
 
-// GET ALL CAMPAIGNS FROM ONE USER 
-// TODO: Not so sure about how to do this one
-// router.get('/user/:id', async (req, res) => {
-//   try {
-//     const campaignData = await Campaign.findAll({
-//       where: {
-//         user_id: req.params.id
-//       },
-//       include: [User, Character],
-//     });
-//     res.status(200).json(campaignData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
-
 // FIND ONE CAMPAIGN
 router.get('/:id', async (req, res) => {
   try {
     const campaignData = await Campaign.findByPk(req.params.id, {
       include: [User, Character],
     });
-
     if (!campaignData) {
       res.status(404).json({ message: 'No Campaign found with that id!' });
       return;
     }
-
     res.status(200).json(campaignData);
   } catch (err) {
     res.status(500).json(err);

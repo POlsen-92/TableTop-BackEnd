@@ -8,10 +8,10 @@ const router = require('express').Router();
 router.post('/', tokenAuth, async (req, res) => {
   try {
     const commentData = await Comment.create({
-      name: req.session.user.name,
+      name: req.user.name,
       description: req.body.description,
       blog_id: req.body.blogid,
-      user_id: req.session.user.id
+      user_id: req.user.id
     })
     res.status(200).json(commentData)
     console.log('it worked')
@@ -52,12 +52,12 @@ router.get('/:id', async (req, res) => {
 });
 
 // update a Comment by its `id` value 
-router.put('/:id', async (req, res) => {
+router.put('/:id', tokenAuth, async (req, res) => {
   try {
     const commentData = await Comment.update(req.body, {
       where: {
         id: req.params.id,
-        user_id: req.session.user.id
+        user_id: req.user.id
       },
     });
     if (!commentData[0]) {
@@ -71,12 +71,12 @@ router.put('/:id', async (req, res) => {
 });
 
 // delete a Comment by its `id` value 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', tokenAuth, async (req, res) => {
   try {
     const commentData = await Comment.destroy({
       where: {
         id: req.params.id,
-        user_id: req.session.user.id
+        user_id: req.user.id
       },
     });
     if (!commentData) {
