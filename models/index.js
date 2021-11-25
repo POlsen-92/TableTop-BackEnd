@@ -10,12 +10,12 @@ const Invite = require("./Invite");
 
 //GAMEPLAY CONNECTIONS
     User.belongsToMany(Campaign, {
-        through: UserCampaign,
+        through: "UserCampaign",
         unique: false,
         foreignKey: 'user_id',
     })
     Campaign.belongsToMany(User, {
-        through: UserCampaign,
+        through: "UserCampaign",
         unique: false,
         foreignKey: 'campaign_id'
     })
