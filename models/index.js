@@ -33,13 +33,6 @@ const Invite = require("./Invite");
     Character.belongsTo(Campaign, {
         foreignKey: 'campaign_id'
     })
-    
-    User.hasMany(Campaign, {
-        foreignKey: 'gm_id'
-    })
-    Campaign.belongsTo(User, {
-        foreignKey: 'gm_id'
-    })
 
     Character.hasOne(Inventory, {
         foreignKey: 'character_id'
