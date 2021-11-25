@@ -19,6 +19,13 @@ const Invite = require("./Invite");
         unique: false,
         foreignKey: 'campaign_id'
     })
+
+    User.hasMany(Campaign, {
+        foreignKey: 'gm_id'
+    })
+    Campaign.belongsTo(User, {
+        foreignKey: 'gm_id'
+    })
     
     User.hasMany(Character, {
         foreignKey: 'user_id'

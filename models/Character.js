@@ -16,12 +16,20 @@ Character.init(
             type: DataTypes.STRING,
             default: '',
         },
+        background: {
+            type: DataTypes.STRING,
+            default: '',
+        },
         class: {
             type: DataTypes.STRING,
-        },
+        }, 
         subClass: {
             type: DataTypes.STRING,
             default:'',
+        },
+        feats: {
+            type: DataTypes.STRING,
+            default: ''
         },
         level: {
             type: DataTypes.INTEGER,

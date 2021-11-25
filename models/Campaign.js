@@ -9,10 +9,6 @@ Campaign.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        gm_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
         image_content: {
             type: DataTypes.STRING
         },
