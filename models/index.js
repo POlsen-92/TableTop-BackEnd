@@ -4,6 +4,7 @@ const Character = require ('./Character');
 const UserCampaign = require ('./UserCampaign');
 const Blog = require("./Blog");
 const Comment = require("./Comment");
+const Invite = require("./Invite");
 
 User.belongsToMany(Campaign, {
     through: "UserCampaign",
@@ -40,6 +41,23 @@ User.hasMany(Campaign, {
 Campaign.belongsTo(User, {
     foreignKey: 'gm_id'
 })
+
+User.hasMany(Invite, {
+    foreignKey: 'user_id'
+})
+
+Invite.belongsTo(User, {
+    foreignKey: 'user_id'
+})
+
+Campaign.hasMany(Invite, {
+    foreignKey: 'campaign'
+})
+
+Invite.belongsTo(Campaign, {
+    foreignKey: 'campaign_id'
+})
+
 // for the community page, Marco
 User.hasMany(Blog);
 
@@ -54,4 +72,4 @@ Comment.belongsTo(User);
 User.hasMany(Comment);
 
 
-module.exports = {User, Campaign, Character, UserCampaign, Blog, Comment};
+module.exports = {User, Campaign, Character, UserCampaign, Blog, Comment, Invite};

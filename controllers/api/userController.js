@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Campaign, Character, Blog, Comment } = require("../../models");
+const { User, Campaign, Character, Blog, Comment, Invite } = require("../../models");
 const jwt = require("jsonwebtoken");
 const tokenAuth = require("../../middleware/tokenAuth");
 const bcrypt = require("bcrypt");
@@ -95,10 +95,26 @@ router.get("/all", (req, res) => {
 router.get("/", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.user.id, {
-      include: [Campaign, Character, Blog, Comment],
+      include: [Campaign, Character, Blog, Comment, Invite],
     });
     if (!userData) {
       res.status(404).json({ message: "No User found with that id!" });
+      return;
+    }
+    res.status(200).json(userData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// FIND A SINGLE USER USING EMAIL
+router.get("/:email", tokenAuth, async (req, res) => {
+  try {
+    const userData = await User.findOne({
+      where: {email:req.params.email},
+    });
+    if (!userData) {
+      res.status(404).json({ message: "No User found with that email!" });
       return;
     }
     res.status(200).json(userData);
