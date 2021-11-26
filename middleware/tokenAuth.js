@@ -7,7 +7,7 @@ const tokenAuth = function(req,res,next){
         const token =req.headers.authorization.split(" ").pop();
         jwt.verify(token, process.env.TOKEN_KEY,function(err,data){
             if(err){
-                console.log(err)
+                console.log('token error ' + err)
                 return res.status(403).send("invalid token")
             } else {
                 console.log("success");
