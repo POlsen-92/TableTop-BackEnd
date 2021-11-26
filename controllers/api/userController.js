@@ -166,15 +166,15 @@ router.get("/profile", tokenAuth, (req, res) => {
   });
 });
 
-// FIND A SINGLE USER USING LOGIN CREDENTIALS - GAME 
-router.get("/game", tokenAuth, async (req, res) => {
+// FIND A SINGLE USER USING ID - GAME 
+router.get("/game:id", async (req, res) => {
   try {
-    const userData = await User.findByPk(req.user.id, {
+    const userData = await User.findByPk(req.params.id, {
       include: [Campaign, Character ],
     });
     const campaignData = await Campaign.findAll({ //TODO: MAY ALSO CAUSE ISSUES IF USED
       where: {
-        gm_id: req.user.id
+        gm_id: req.params.id
       }
     });
     if (!userData) {
@@ -187,10 +187,10 @@ router.get("/game", tokenAuth, async (req, res) => {
   }
 });
 
-// FIND A SINGLE USER USING LOGIN CREDENTIALS - FORUM
-router.get("/forum", tokenAuth, async (req, res) => {
+// FIND A SINGLE USER USING ID - FORUM
+router.get("/forum:id", async (req, res) => {
   try {
-    const userData = await User.findByPk(req.user.id, {
+    const userData = await User.findByPk(req.params.id, {
       include: [Blog, Comment],
     });
     if (!userData) {

@@ -22,7 +22,7 @@ router.post('/', tokenAuth, async (req, res) => {
     };
 });
 
-// find all Comments. be sure to include its associated Blogs
+// find all Comments. be sure to include its associated Users and Blogs
 router.get('/', async (req, res) => {
   try {
     const commentData = await Comment.findAll({
@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// find one Comment by its `id` value. be sure to include its associated Comments
+// find one Comment by its `id` value. be sure to include its associated Users and Blogs
 router.get('/:id', async (req, res) => {
   try {
     const commentData = await Comment.findByPk(req.params.id, {
