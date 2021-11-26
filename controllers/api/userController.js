@@ -91,13 +91,13 @@ router.get("/all", (req, res) => {
     });
 });
 
-// FIND A SINGLE USER USING LOGIN CREDENTIALS - ALL
+// FIND A SINGLE USER USING LOGIN CREDENTIALS - FIND SELF FUNCTION
 router.get("/", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.user.id, {
       include: [Campaign, Character, Blog, Comment, Invite],
     });
-    // const campaignData = await Campaign.findAll({
+    // const campaignData = await Campaign.findAll({  TODO: THIS CAUSES ISSUES ATM
     //   where: {
     //     gm_id: req.user.id
     //   }
@@ -155,13 +155,24 @@ router.get("/email:email", tokenAuth, async (req, res) => {
   }
 });
 
-// FIND A SINGLE USER USING LOGIN CREDENTIALS - GAME
+// FIND A SINGLE USER PROFILE USING LOGIN CREDENTIALS
+router.get("/profile", tokenAuth, (req, res) => {
+  User.findByPk(req.user.id).then((foundUser) => {
+    res.status(200).json(foundUser);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err: "an error occurred" });
+  });
+});
+
+// FIND A SINGLE USER USING LOGIN CREDENTIALS - GAME 
 router.get("/game", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.user.id, {
       include: [Campaign, Character ],
     });
-    const campaignData = await Campaign.findAll({
+    const campaignData = await Campaign.findAll({ //TODO: MAY ALSO CAUSE ISSUES IF USED
       where: {
         gm_id: req.user.id
       }
@@ -192,19 +203,7 @@ router.get("/forum", tokenAuth, async (req, res) => {
   }
 });
 
-
-// FIND A SINGLE USER PROFILE USING LOGIN CREDENTIALS
-router.get("/profile", tokenAuth, (req, res) => {
-  User.findByPk(req.user.id).then((foundUser) => {
-    res.status(200).json(foundUser);
-  })
-  .catch((err) => {
-    console.log(err);
-    res.status(500).json({ err: "an error occurred" });
-  });
-});
-
-// FIND USER BY ID - AND UPDATE USERNAME, EMAIL, IMAGE
+// UPDATE USER
 router.put("/update", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.user.id);

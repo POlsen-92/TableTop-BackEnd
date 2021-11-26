@@ -78,7 +78,7 @@ router.delete('/:id', tokenAuth, async (req, res) => {
       },
     });
     if (!blogData) {
-      res.status(404).json({ message: 'No Blog with this id!' });
+      res.status(404).json({ message: `You can't delete this!` });
       return;
     }
     res.status(200).json(blogData);
