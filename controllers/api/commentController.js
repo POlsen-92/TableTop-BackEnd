@@ -5,19 +5,15 @@ const router = require('express').Router();
 // The `http://localhost:3001/api/comment` endpoint
 
 // create a new Comment 
-router.post('/', tokenAuth, async (req, res) => {
+router.post('/:id', tokenAuth, async (req, res) => {
   try {
-    
     const commentData = await Comment.create({
-      name: req.user.name,
-      description: req.body.description,
-      blog_id: req.body.blogid,
-      user_id: req.user.id
+      user_id: req.user.id,
+      blog_id: req.params.id,
+      body: req.body.description
     })
     res.status(200).json(commentData)
-    console.log('it worked')
   } catch(err) {
-      console.log(err);
       res.status(400).json({ message: "an error occured", err: err });
     };
 });
@@ -40,12 +36,10 @@ router.get('/:id', async (req, res) => {
     const commentData = await Comment.findByPk(req.params.id, {
       include: [User, Blog],
     });
-
     if (!commentData) {
       res.status(404).json({ message: 'No Comment found with that id!' });
       return;
     }
-
     res.status(200).json(commentData);
   } catch (err) {
     res.status(500).json(err);
@@ -61,7 +55,7 @@ router.put('/:id', tokenAuth, async (req, res) => {
         user_id: req.user.id
       },
     });
-    if (!commentData[0]) {
+    if (!commentData) {
       res.status(404).json({ message: 'No Comment with this id!' });
       return;
     }
