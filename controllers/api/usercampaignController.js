@@ -34,9 +34,62 @@ router.post('/:id', tokenAuth,  async (req, res) => {
     };
 });
 
-// DELETE USER FROM CAMPAIGN
+// DELETE USER FROM CAMPAIGN - By User
+router.delete("/userdel:id", tokenAuth, (req, res) => {
+  UserCampaign.destroy({
+    where: {
+      campaign_id: req.params.id,
+      user_id: req.user.id
+    },
+  })
+  .then((delUserCampaign) => {
+    if (delUserCampaign) {
+      res.json(delUserCampaign);
+    } else {
+      res.status(404).json({ err: "User Campaign Connection Can't be Deleted" });
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err: "an error occurred" });
+  });
+});
 
-
+// DELETE USER FROM CAMPAIGN 
+router.delete("/gmdel:id", tokenAuth, (req, res) => {
+  Campaign.findOne({
+    where: {
+      id: req.params.id,
+    },
+  })
+  .then((campaignData) => {
+    if (campaignData.gm_id === req.user.id) {
+      UserCampaign.destroy({
+        where: {
+          campaign_id: req.params.id,
+          user_id: req.body.id
+        },
+      })
+      .then((delUserCampaign) => {
+        if (delUserCampaign) {
+          res.json(delUserCampaign);
+        } else {
+          res.status(404).json({ err: "User Campaign Connection Can't be Deleted" });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ err: "an error occurred" });
+      });
+    } else {
+      res.status(404).json({ err: "You Can't Delete this Connection" });
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err: "an error occurred" });
+  });
+});
 
 
 module.exports = router;
