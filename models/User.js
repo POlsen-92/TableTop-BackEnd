@@ -40,10 +40,6 @@ User.init(
                 newData.password = await bcrypt.hash(newData.password, 10);
                 return newData;
             },
-            beforeUpdate: async (updateData) => {
-                updateData.password = await bcrypt.hash(updateData.password, 10);
-                return updateData;
-            },
         },
         sequelize,
     },
