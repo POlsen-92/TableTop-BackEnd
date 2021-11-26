@@ -7,7 +7,7 @@ Comment.init({
     body: {
         type: DataTypes.TEXT,
         allowNull: false
-    } 
+    }
 },{
     sequelize
 });

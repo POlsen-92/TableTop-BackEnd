@@ -50,7 +50,6 @@ router.post('/', tokenAuth, async (req, res) => {
     })
     res.status(200).json(blogData)
   } catch(err) {
-    console.log(err);
     res.status(400).json({ message: "an error occured", err: err });
   };
 });
@@ -64,7 +63,7 @@ router.put('/:id', tokenAuth, async (req, res) => {
         user_id: req.user.id
       },
     });
-    if (!blogData[0]) {
+    if (!blogData) {
       res.status(404).json({ message: 'No Blog with this id!' });
       return;
     }
