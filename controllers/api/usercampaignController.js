@@ -9,7 +9,7 @@ router.get("/all", (req, res) => {
   UserCampaign.findAll()
     .then((dbUsersCampaigns) => {
       if (dbUsersCampaigns.length) {
-        res.json(dbUsersCampaigns);
+        res.status(200).json(dbUsersCampaigns);
       } else {
         res.status(404).json({ err: "No User Campaign Connections found!" });
       }
