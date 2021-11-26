@@ -55,7 +55,7 @@ router.delete("/userdel:id", tokenAuth, (req, res) => {
   });
 });
 
-// DELETE USER FROM CAMPAIGN 
+// DELETE USER FROM CAMPAIGN - By GM 
 router.delete("/gmdel:id", tokenAuth, (req, res) => {
   Campaign.findOne({
     where: {
