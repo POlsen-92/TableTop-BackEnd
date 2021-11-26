@@ -97,16 +97,16 @@ router.get("/", tokenAuth, async (req, res) => {
     const userData = await User.findByPk(req.user.id, {
       include: [Campaign, Character, Blog, Comment, Invite],
     });
-    // const campaignData = await Campaign.findAll({
-    //   where: {
-    //     gm_id: req.user.id
-    //   }
-    // });
+    const campaignData = await Campaign.findAll({
+      where: {
+        gm_id: req.user.id
+      }
+    });
     if (!userData) {
       res.status(404).json({ message: "No User found" });
       return;
     }
-    res.status(200).json(userData);
+    res.status(200).json([userData, campaignData]);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
