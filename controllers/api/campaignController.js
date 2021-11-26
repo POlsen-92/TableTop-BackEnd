@@ -60,7 +60,7 @@ router.get('/gm', tokenAuth, async (req, res) => {
 });
 
 // FIND ONE CAMPAIGN
-router.get('/:id', async (req, res) => {
+router.get('/id:id', async (req, res) => {
   try {
     const campaignData = await Campaign.findByPk(req.params.id, {
       include: [User, Character],
