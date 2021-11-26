@@ -200,24 +200,50 @@ router.get("/profile", tokenAuth, (req, res) => {
   });
 });
 
-// FIND USER BY ID - AND UPDATE
+// FIND USER BY ID - AND UPDATE USERNAME, EMAIL, IMAGE
 router.put("/update", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.user.id);
     if (!userData) {
       res.status(404).json({ message: "No User found with that id!" });
       return;
+    } else if (req.body.username) {
+      const updateUser = await User.update({
+        username: req.body.username,
+      }, {
+        where: { id: req.user.id },
+      });
+      res.status(200).json(updateUser);
+    } else if (req.body.email) {
+      const updateUser = await User.update({
+        email: req.body.email,
+      }, {
+        where: { id: req.user.id },
+      });
+      res.status(200).json(updateUser);
+    } else if (req.body.password) {
+      const newPassword = await bcrypt.hash(req.body.password,10)
+      const updateUser = await User.update({
+          password:newPassword,
+      }, {
+          where: {id:req.user.id}
+      })
+      res.status(200).json(updateUser);
+    } else if (req.body.image_content) {
+      const updateUser = await User.update({
+        image_content: req.body.image_content,
+      }, {
+        where: { id: req.user.id },
+      });
+      res.status(200).json(updateUser);
+      return;
+    } else {
+      res.status(401).json({message:"Something went Wrong"})
     }
-    const updateUser = await User.update(req.body, {
-      where: { id: req.user.id },
-      individualHooks: true
-    });
-    res.status(200).json(updateUser);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ err: "an error occurred" });
   }
 });
-
 
 // DELETE A USER USING LOGIN CREDENTIALS
 router.delete("/", tokenAuth, (req, res) => {
