@@ -36,7 +36,25 @@ router.post('/:id', tokenAuth,  async (req, res) => {
 
 // DELETE USER FROM CAMPAIGN
 
-
+router.delete("/:id", tokenAuth, (req, res) => {
+  UserCampaign.destroy({
+    where: {
+      campaign_id: req.params.id,
+      user_id: req.user.id
+    },
+  })
+  .then((delUserCampaign) => {
+    if (delUserCampaign) {
+      res.json(delUserCampaign);
+    } else {
+      res.status(404).json({ err: "no usercampaign connection found" });
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err: "an error occurred" });
+  });
+});
 
 
 module.exports = router;
