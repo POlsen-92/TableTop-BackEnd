@@ -30,6 +30,10 @@ router.get('/all', async (req, res) => {
     const campaignData = await Campaign.findAll({
       include: [User, Character],
     });
+    if (!campaignData) {
+      res.status(404).json({ message: 'No Campaigns found, You should make One!' });
+      return;
+    }
     res.status(200).json(campaignData);
   } catch (err) {
     res.status(500).json(err);
@@ -45,6 +49,10 @@ router.get('/gm', tokenAuth, async (req, res) => {
       },
       include: [User, Character],
     });
+    if (!campaignData) {
+      res.status(404).json({ message: 'This User is not a GM of any Campaigns!' });
+      return;
+    }
     res.status(200).json(campaignData);
   } catch (err) {
     res.status(500).json(err);
@@ -58,7 +66,7 @@ router.get('/:id', async (req, res) => {
       include: [User, Character],
     });
     if (!campaignData) {
-      res.status(404).json({ message: 'No Campaign found with that id!' });
+      res.status(404).json({ message: 'No Campaign found!' });
       return;
     }
     res.status(200).json(campaignData);
@@ -68,15 +76,16 @@ router.get('/:id', async (req, res) => {
 });
 
 //UPDATE CAMPAIGN 
-router.put('/:id', async (req, res) => {
+router.put('/:id', tokenAuth, async (req, res) => {
   try {
     const campaignData = await Campaign.update(req.body, {
       where: {
         id: req.params.id,
+        gm_id: req.user.id
       },
     });
     if (!campaignData[0]) {
-      res.status(404).json({ message: 'No Character with this id!' });
+      res.status(404).json({ message: 'Not Able to Update this Campaign!' });
       return;
     }
     res.status(200).json(campaignData);
@@ -96,7 +105,7 @@ router.delete('/:id', tokenAuth, async (req, res) => {
       },
     });
     if (!campaignData) {
-      res.status(404).json({ message: 'No Character with this id!' });
+      res.status(404).json({ message: 'Not able to Destroy this Campaign!' });
       return;
     }
     res.status(200).json(campaignData);
