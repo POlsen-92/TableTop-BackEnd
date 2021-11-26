@@ -5,15 +5,20 @@ const tokenAuth = require("../../middleware/tokenAuth");
 // The `http://localhost:3001/api/character` endpoint
 
 //CREATE CHARACTER
-router.post('/', tokenAuth, async (req, res) => {
+router.post('/camp:id', tokenAuth, async (req, res) => {
   try {
     const characterData = await Character.create({
-      name: req.body.name,
       user_id: req.user.id, 
-      campaign_id: req.body.campaign_id, //not sure about this one
+      campaign_id: req.params.id, 
+      charName: req.body.name,
       race: req.body.race,
+      subRace: req.body.subrace,
+      background: req.body.background,
       class: req.body.class,
-      picture: req.body.picture
+      subClass: req.body.subclass,
+      feats: req.body.feats,
+      level: req.body.level,
+      image_content: req.body.picture 
     })
     res.status(200).json(characterData)
   } catch(err) {
@@ -22,26 +27,49 @@ router.post('/', tokenAuth, async (req, res) => {
   };
 });
 
-//READ CHARACTERS
+// GET ALL CHARACTERS
 router.get('/', async (req, res) => {
   try {
     const characterData = await Character.findAll({
       include: [User, Campaign],
     });
+    if (!characterData) {
+      res.status(404).json({ message: 'No Characters Found!' });
+      return;
+    }
     res.status(200).json(characterData);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.get('/:id', async (req, res) => {
+// GET A CHARACTER BY ID
+router.get('/id:id', async (req, res) => {
   try {
     const characterData = await Character.findByPk(req.params.id, {
       include: [User, Campaign],
     });
-
     if (!characterData) {
       res.status(404).json({ message: 'No Character found with that id!' });
+      return;
+    }
+    res.status(200).json(characterData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// GET ALL CHARACTERS BY ONE USER
+router.get('/user:id', async (req, res) => {
+  try {
+    const characterData = await Character.findAll({
+      where: {
+        user_id: req.params.id
+      },
+      include: [User, Campaign],
+    });
+    if (!characterData) {
+      res.status(404).json({ message: 'No Character found with that User!' });
       return;
     }
 
@@ -52,7 +80,7 @@ router.get('/:id', async (req, res) => {
 });
 
 //UPDATE CHARACTERS
-router.put('/:id', tokenAuth, async (req, res) => {
+router.put('/update:id', tokenAuth, async (req, res) => {
   try {
     const characterData = await Character.update(req.body, {
       where: {
@@ -61,7 +89,7 @@ router.put('/:id', tokenAuth, async (req, res) => {
       },
     });
     if (!characterData[0]) {
-      res.status(404).json({ message: 'No Character with this id!' });
+      res.status(404).json({ message: `Can't Update Character!` });
       return;
     }
     res.status(200).json(characterData);
@@ -81,7 +109,7 @@ router.delete('/:id', tokenAuth, async (req, res) => {
       },
     });
     if (!characterData) {
-      res.status(404).json({ message: 'No Character with this id!' });
+      res.status(404).json({ message: `Can't Delete Character` });
       return;
     }
     res.status(200).json(characterData);
@@ -90,8 +118,5 @@ router.delete('/:id', tokenAuth, async (req, res) => {
   }
 });
   
-
-
-
 
 module.exports = router;
