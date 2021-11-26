@@ -7,6 +7,7 @@ const router = require('express').Router();
 // create a new Comment 
 router.post('/', tokenAuth, async (req, res) => {
   try {
+    
     const commentData = await Comment.create({
       name: req.user.name,
       description: req.body.description,
@@ -21,11 +22,11 @@ router.post('/', tokenAuth, async (req, res) => {
     };
 });
 
-// find all Comments. be sure to include its associated Blogs
+// find all Comments. be sure to include its associated Users and Blogs
 router.get('/', async (req, res) => {
   try {
     const commentData = await Comment.findAll({
-      include: [Blog],
+      include: [User, Blog],
     });
     res.status(200).json(commentData);
   } catch (err) {
@@ -33,11 +34,11 @@ router.get('/', async (req, res) => {
   }
 });
 
-// find one Comment by its `id` value. be sure to include its associated Comments
+// find one Comment by its `id` value. be sure to include its associated Users and Blogs
 router.get('/:id', async (req, res) => {
   try {
     const commentData = await Comment.findByPk(req.params.id, {
-      include: [Blog],
+      include: [User, Blog],
     });
 
     if (!commentData) {

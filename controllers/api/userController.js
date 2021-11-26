@@ -91,7 +91,7 @@ router.get("/all", (req, res) => {
     });
 });
 
-// FIND A SINGLE USER USING LOGIN CREDENTIALS - ALL
+// FIND A SINGLE USER USING LOGIN CREDENTIALS - FIND SELF FUNCTION
 router.get("/", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.user.id, {
@@ -155,15 +155,26 @@ router.get("/email:email", tokenAuth, async (req, res) => {
   }
 });
 
-// FIND A SINGLE USER USING LOGIN CREDENTIALS - GAME
-router.get("/game", tokenAuth, async (req, res) => {
+// FIND A SINGLE USER PROFILE USING LOGIN CREDENTIALS
+router.get("/profile", tokenAuth, (req, res) => {
+  User.findByPk(req.user.id).then((foundUser) => {
+    res.status(200).json(foundUser);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json({ err: "an error occurred" });
+  });
+});
+
+// FIND A SINGLE USER USING ID - GAME 
+router.get("/game:id", async (req, res) => {
   try {
-    const userData = await User.findByPk(req.user.id, {
+    const userData = await User.findByPk(req.params.id, {
       include: [Campaign, Character ],
     });
-    const campaignData = await Campaign.findAll({
+    const campaignData = await Campaign.findAll({ //TODO: MAY ALSO CAUSE ISSUES IF USED
       where: {
-        gm_id: req.user.id
+        gm_id: req.params.id
       }
     });
     if (!userData) {
@@ -176,10 +187,10 @@ router.get("/game", tokenAuth, async (req, res) => {
   }
 });
 
-// FIND A SINGLE USER USING LOGIN CREDENTIALS - FORUM
-router.get("/forum", tokenAuth, async (req, res) => {
+// FIND A SINGLE USER USING ID - FORUM
+router.get("/forum:id", async (req, res) => {
   try {
-    const userData = await User.findByPk(req.user.id, {
+    const userData = await User.findByPk(req.params.id, {
       include: [Blog, Comment],
     });
     if (!userData) {
@@ -192,19 +203,7 @@ router.get("/forum", tokenAuth, async (req, res) => {
   }
 });
 
-
-// FIND A SINGLE USER PROFILE USING LOGIN CREDENTIALS
-router.get("/profile", tokenAuth, (req, res) => {
-  User.findByPk(req.user.id).then((foundUser) => {
-    res.status(200).json(foundUser);
-  })
-  .catch((err) => {
-    console.log(err);
-    res.status(500).json({ err: "an error occurred" });
-  });
-});
-
-// FIND USER BY ID - AND UPDATE USERNAME, EMAIL, IMAGE
+// UPDATE USER
 router.put("/update", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.user.id);
