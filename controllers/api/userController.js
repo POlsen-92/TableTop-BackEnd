@@ -22,7 +22,7 @@ router.post("/signup", (req, res) => {
         username: req.body.username,
         password: req.body.password,
         email: req.body.email.toLowerCase(),
-        image_content: req.body.image_content,
+        image_content: 'https://avatars.dicebear.com/api/pixel-art/sdfsdfsdfsdfsdfs.svg',
       })
         .then((newUser) => {
           res.json(newUser);
