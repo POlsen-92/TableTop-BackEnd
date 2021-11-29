@@ -36,7 +36,7 @@ router.get('/user/:id', async (req, res) => {
 });
 
 // SEND INVITE TO USER FROM CAMPAIGN
-router.post('/',  async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const inviteData = await Invite.create({
       campaign_id: req.body.campaign_id,

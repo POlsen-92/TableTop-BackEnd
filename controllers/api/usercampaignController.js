@@ -21,10 +21,10 @@ router.get("/all", (req, res) => {
 });
 
 // ADD USER TO CAMPAIGN
-router.post('/:id', tokenAuth,  async (req, res) => {
+router.post('/', tokenAuth,  async (req, res) => {
   try {
     const usercampaignData = await UserCampaign.create({
-      campaign_id: req.params.id,
+      campaign_id: req.body.campaign_id,
       user_id: req.user.id
     })
     res.status(200).json(usercampaignData)

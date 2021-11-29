@@ -97,16 +97,16 @@ router.get("/", tokenAuth, async (req, res) => {
     const userData = await User.findByPk(req.user.id, {
       include: [Campaign, Character, Blog, Comment, Invite],
     });
-    const campaignData = await Campaign.findAll({
-      where: {
-        gm_id: req.user.id
-      }
-    });
+    // const campaignData = await Campaign.findAll({
+    //   where: {
+    //     gm_id: req.user.id
+    //   }
+    // });
     if (!userData) {
       res.status(404).json({ message: "No User found" });
       return;
     }
-    res.status(200).json([userData, campaignData]);
+    res.status(200).json(userData);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -118,17 +118,13 @@ router.get("/id:id", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findOne({
       where: {id:req.params.id},
-    });
-    const campaignData = await Campaign.findAll({
-      where: {
-        gm_id: req.user.id
-      }
+      include: [Campaign, Character, Blog, Comment, Invite],
     });
     if (!userData) {
       res.status(404).json({ message: "No User found with that ID!" });
       return;
     }
-    res.status(200).json([userData, campaignData]);
+    res.status(200).json(userData);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -139,17 +135,13 @@ router.get("/email:email", tokenAuth, async (req, res) => {
   try {
     const userData = await User.findOne({
       where: {email:req.params.email},
-    });
-    const campaignData = await Campaign.findAll({
-      where: {
-        gm_id: req.user.id
-      }
+      include: [Campaign, Character, Blog, Comment, Invite],
     });
     if (!userData) {
       res.status(404).json({ message: "No User found with that email!" });
       return;
     }
-    res.status(200).json([userData, campaignData]);
+    res.status(200).json(userData);
   } catch (err) {
     res.status(500).json(err);
   }
