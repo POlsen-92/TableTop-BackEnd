@@ -20,7 +20,6 @@ Campaign.init(
     {
         sequelize,
     },
-    
 )
 
 module.exports = Campaign;

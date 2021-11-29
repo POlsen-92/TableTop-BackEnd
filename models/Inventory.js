@@ -11,7 +11,7 @@ Inventory.init({
     type: {
         type: DataTypes.STRING,
         allowNull: false
-    }
+    },
 },{
     sequelize
 });

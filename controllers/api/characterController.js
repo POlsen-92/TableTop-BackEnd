@@ -8,8 +8,8 @@ const tokenAuth = require("../../middleware/tokenAuth");
 router.post('/camp:id', tokenAuth, async (req, res) => {
   try {
     const characterData = await Character.create({
-      user_id: req.user.id, 
-      campaign_id: req.params.id, 
+      user_id: req.user.id,
+      campaign_id: req.params.id,
       charName: req.body.name,
       race: req.body.race,
       subRace: req.body.subrace,
