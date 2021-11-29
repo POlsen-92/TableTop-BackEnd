@@ -7,7 +7,6 @@ const Blog = require("./Blog");
 const Comment = require("./Comment");
 const Invite = require("./Invite");
 
-
 //GAMEPLAY CONNECTIONS
     User.belongsToMany(Campaign, {
         through: "UserCampaign",
@@ -21,6 +20,7 @@ const Invite = require("./Invite");
     })
 
     User.hasMany(Campaign, {
+        as: "gmCampaign",
         foreignKey: 'gm_id'
     })
     Campaign.belongsTo(User, {
