@@ -38,6 +38,34 @@ Character.init(
         image_content: {
             type: DataTypes.STRING,
             default: '',
+        },
+        strength : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        dexterity : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        constitution : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        intelligence : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        wisdom : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        charisma : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        speed: {
+            type: DataTypes.INTEGER,
+            default: 0
         }
     },
     {
