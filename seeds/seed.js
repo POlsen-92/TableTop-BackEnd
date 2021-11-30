@@ -7,7 +7,6 @@ const seedInventory = require ('./inventoryData');
 const seedUserCampaign = require ('./userCampaignData');
 const seedBlog = require ('./blogData');
 const seedComment = require ('./commentData');
-const seedInvite = require ('./inviteData');
 
 
 const seedDatabase = async () => {
@@ -34,9 +33,6 @@ const seedDatabase = async () => {
   
   await seedComment()
   console.log('\n----- COMMENTS SEEDED -----\n');
-
-  await seedInvite()
-  console.log('\n----- INVITES SEEDED -----\n');
   
   process.exit(0);
 };

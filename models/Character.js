@@ -9,6 +9,10 @@ Character.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        personality : {
+            type: DataTypes.STRING,
+            default: 0
+        },
         race: {
             type: DataTypes.STRING,
         },
@@ -27,10 +31,6 @@ Character.init(
             type: DataTypes.STRING,
             default:'',
         },
-        feats: {
-            type: DataTypes.STRING,
-            default: ''
-        },
         level: {
             type: DataTypes.INTEGER,
             default: 1
@@ -38,7 +38,47 @@ Character.init(
         image_content: {
             type: DataTypes.STRING,
             default: '',
-        }
+        },
+        strength : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        dexterity : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        constitution : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        intelligence : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        wisdom : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        charisma : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        speed: {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        hitpoints : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        temphitpoints : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
+        currhitpoints : {
+            type: DataTypes.INTEGER,
+            default: 0
+        },
     },
     {
         sequelize,
