@@ -3,7 +3,6 @@ const sequelize = require('../config/connection');
 const seedUser = require('./userData');
 const seedCampaign = require ('./campaignData');
 const seedCharacter = require('./characterData');
-const seedInventory = require ('./inventoryData');
 const seedUserCampaign = require ('./userCampaignData');
 const seedBlog = require ('./blogData');
 const seedComment = require ('./commentData');
@@ -21,9 +20,6 @@ const seedDatabase = async () => {
   
   await seedCharacter()
   console.log('\n----- CHARACTERS SEEDED -----\n');
-
-  await seedInventory()
-  console.log('\n----- INVENTORIES SEEDED -----\n');
   
   await seedUserCampaign()
   console.log('\n----- USERCAMPAIGN SEEDED -----\n');

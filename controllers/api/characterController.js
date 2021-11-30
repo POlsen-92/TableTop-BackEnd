@@ -1,4 +1,4 @@
-const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory } = require("../../models");
+const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");
 const router = require('express').Router();
 const tokenAuth = require("../../middleware/tokenAuth");
 
@@ -11,14 +11,24 @@ router.post('/camp:id', tokenAuth, async (req, res) => {
       user_id: req.user.id,
       campaign_id: req.params.id,
       charName: req.body.name,
+      personality: req.body.personality,
+      age: req.body.age,
       race: req.body.race,
       subRace: req.body.subrace,
+      alignment: req.body.alignment,
       background: req.body.background,
       class: req.body.class,
       subClass: req.body.subclass,
-      feats: req.body.feats,
       level: req.body.level,
-      image_content: req.body.picture 
+      image_content: req.body.picture,
+      strength: req.body.strength,
+      dexterity: req.body.dexterity,
+      constitution: req.body.constitution,
+      intelligence: req.body.intelligence,
+      wisdom: req.body.wisdom,
+      charisma: req.body.charisma,
+      speed: req.body.speed,
+      hitpoints: req.body.hitpoints,
     })
     res.status(200).json(characterData)
   } catch(err) {
@@ -31,7 +41,7 @@ router.post('/camp:id', tokenAuth, async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const characterData = await Character.findAll({
-      include: [User, Campaign],
+      include: [User, Campaign, Inventory, Feature, Proficiency, Spell ],
     });
     if (!characterData) {
       res.status(404).json({ message: 'No Characters Found!' });
@@ -47,7 +57,7 @@ router.get('/', async (req, res) => {
 router.get('/id:id', async (req, res) => {
   try {
     const characterData = await Character.findByPk(req.params.id, {
-      include: [User, Campaign],
+      include: [User, Campaign, Inventory, Feature, Proficiency, Spell],
     });
     if (!characterData) {
       res.status(404).json({ message: 'No Character found with that id!' });
@@ -66,7 +76,7 @@ router.get('/user:id', async (req, res) => {
       where: {
         user_id: req.params.id
       },
-      include: [User, Campaign],
+      include: [User, Campaign, Inventory, Feature, Proficiency, Spell],
     });
     if (!characterData) {
       res.status(404).json({ message: 'No Character found with that User!' });

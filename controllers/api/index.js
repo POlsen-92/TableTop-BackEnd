@@ -15,6 +15,15 @@ router.use("/character",characterRoutes);
 const inventoryRoutes = require("./inventoryController");
 router.use("/inventory",inventoryRoutes);
 
+const featureRoutes = require("./featureController");
+router.use("/feature",featureRoutes);
+
+const proficiencyRoutes = require("./proficiencyController");
+router.use("/proficiency",proficiencyRoutes);
+
+const spellRoutes = require("./spellController");
+router.use("/spell",spellRoutes);
+
 const usercampaignRoutes = require("./usercampaignController");
 router.use("/usercampaign",usercampaignRoutes);
 

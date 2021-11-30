@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Inventory extends Model {}
+class Spell extends Model {}
 
-Inventory.init({
+Spell.init({
     name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -12,28 +12,19 @@ Inventory.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    level: {
+        type: DataTypes.STRING,
+    },
+    duration: {
+        type: DataTypes.STRING,
+    },
+    range: {
+        type: DataTypes.STRING,
+    },
     description: {
         type: DataTypes.TEXT,
     },
-    properties: {
-        type: DataTypes.STRING,
-    },
-    cost: {
-        type: DataTypes.INTEGER,
-    },
-    weight: {
-        type: DataTypes.INTEGER,
-    },
-    armorClass: {
-        type: DataTypes.INTEGER,
-    },
-    strength: {
-        type: DataTypes.INTEGER,
-    },
-    stealth: {
-        type: DataTypes.INTEGER,
-    },
-    damage: {
+    attack: {
         type: DataTypes.INTEGER,
     },
     user_id: {
@@ -44,4 +35,4 @@ Inventory.init({
     sequelize
 });
 
-module.exports = Inventory;
+module.exports = Spell;

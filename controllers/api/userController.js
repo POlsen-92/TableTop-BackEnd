@@ -1,8 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory } = require("../../models");
-const jwt = require("jsonwebtoken");
+const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");
 const tokenAuth = require("../../middleware/tokenAuth");
+const router = require('express').Router();
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 

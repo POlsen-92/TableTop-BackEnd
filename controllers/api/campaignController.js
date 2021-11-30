@@ -1,5 +1,4 @@
-const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory } = require("../../models");
-const router = require('express').Router();
+const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");const router = require('express').Router();
 const tokenAuth = require("../../middleware/tokenAuth");
 
 // The `http://localhost:3001/api/campaign` endpoint
