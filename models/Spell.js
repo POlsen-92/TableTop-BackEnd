@@ -12,6 +12,9 @@ Spell.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    description: {
+        type: DataTypes.TEXT,
+    },
     level: {
         type: DataTypes.STRING,
     },
@@ -20,9 +23,6 @@ Spell.init({
     },
     range: {
         type: DataTypes.STRING,
-    },
-    description: {
-        type: DataTypes.TEXT,
     },
     attack: {
         type: DataTypes.INTEGER,
