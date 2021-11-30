@@ -88,7 +88,7 @@ Character.init(
         currhitpoints : {
             type: DataTypes.INTEGER,
             default: 0
-        },
+        }
     },
     {
         sequelize,

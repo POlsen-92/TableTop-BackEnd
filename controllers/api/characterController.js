@@ -10,7 +10,7 @@ router.post('/camp:id', tokenAuth, async (req, res) => {
     const characterData = await Character.create({
       user_id: req.user.id,
       campaign_id: req.params.id,
-      charName: req.body.name,
+      charName: req.body.charName,
       personality: req.body.personality,
       age: req.body.age,
       race: req.body.race,
@@ -28,7 +28,7 @@ router.post('/camp:id', tokenAuth, async (req, res) => {
       wisdom: req.body.wisdom,
       charisma: req.body.charisma,
       speed: req.body.speed,
-      hitpoints: req.body.hitpoints,
+      hitpoints: req.body.hitpoints
     })
     res.status(200).json(characterData)
   } catch(err) {
