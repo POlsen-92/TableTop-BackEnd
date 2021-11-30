@@ -2,15 +2,17 @@ const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventor
 const tokenAuth = require("../../middleware/tokenAuth");
 const router = require('express').Router();
 
-// The `http://localhost:3001/api/inventory` endpoint
+// The `http://localhost:3001/api/spell` endpoint
 
 // create  
 router.post('/:id', tokenAuth, async (req, res) => {
     try {
-      const inventoryData = await Inventory.create({
+      const spellData = await Spell.create({
         user_id: req.user.id,
+        blog_id: req.params.id,
+        body: req.body.description
       })
-      res.status(200).json(inventoryData)
+      res.status(200).json(spellData)
     } catch(err) {
         res.status(400).json({ message: "an error occured", err: err });
       };
@@ -19,14 +21,14 @@ router.post('/:id', tokenAuth, async (req, res) => {
 // find one 
 router.get('/:id', async (req, res) => {
     try {
-      const inventoryData = await Inventory.findByPk(req.params.id, {
+      const spellData = await Spell.findByPk(req.params.id, {
         include: [User, Character],
       });
-      if (!inventoryData) {
-        res.status(404).json({ message: 'No Inventory found with that id!' });
+      if (!spellData) {
+        res.status(404).json({ message: 'No Spell found with that id!' });
         return;
       }
-      res.status(200).json(inventoryData);
+      res.status(200).json(spellData);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -35,17 +37,17 @@ router.get('/:id', async (req, res) => {
 // update 
 router.put('/:id', tokenAuth, async (req, res) => {
     try {
-      const inventoryData = await Inventory.update(req.body, {
+      const spellData = await Spell.update(req.body, {
         where: {
           id: req.params.id,
           user_id: req.user.id
         },
       });
-      if (!inventoryData) {
-        res.status(404).json({ message: 'No Inventory with this id!' });
+      if (!spellData) {
+        res.status(404).json({ message: 'No Spell with this id!' });
         return;
       }
-      res.status(200).json(inventoryData);
+      res.status(200).json(spellData);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -54,21 +56,22 @@ router.put('/:id', tokenAuth, async (req, res) => {
 // delete 
 router.delete('/:id', tokenAuth, async (req, res) => {
     try {
-      const inventoryData = await Inventory.destroy({
+      const spellData = await Spell.destroy({
         where: {
           id: req.params.id,
           user_id: req.user.id
         },
       });
-      if (!inventoryData) {
-        res.status(404).json({ message: 'No Inventory with this id!' });
+      if (!spellData) {
+        res.status(404).json({ message: 'No Spell with this id!' });
         return;
       }
-      res.status(200).json(inventoryData);
+      res.status(200).json(spellData);
     } catch (err) {
       res.status(500).json(err);
     }
   });
+
 
 
 module.exports = router;

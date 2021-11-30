@@ -10,7 +10,7 @@ Character.init(
             allowNull: false,
         },
         personality : {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             default: 0
         },
         race: {

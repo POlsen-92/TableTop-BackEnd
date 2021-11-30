@@ -1,4 +1,4 @@
-const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory } = require("../../models");
+const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");
 const router = require('express').Router();
 const tokenAuth = require("../../middleware/tokenAuth");
 
@@ -31,7 +31,7 @@ router.post('/camp:id', tokenAuth, async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const characterData = await Character.findAll({
-      include: [User, Campaign],
+      include: [User, Campaign, ],
     });
     if (!characterData) {
       res.status(404).json({ message: 'No Characters Found!' });
