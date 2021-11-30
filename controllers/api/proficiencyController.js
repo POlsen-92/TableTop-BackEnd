@@ -15,7 +15,8 @@ router.post('/:id', tokenAuth, async (req, res) => {
         ability: req.body.ability,
         script: req.body.script,
         typicalSpeakers: req.body.typicalSpeakers,
-        user_id: req.user.id
+        user_id: req.user.id,
+        description: req.body.description
       })
       res.status(200).json(proficiencyData)
     } catch(err) {
