@@ -26,11 +26,11 @@ Character.init(
             default: '',
         },
         alignment: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             default:'',
         },
         background: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             default: '',
         },
         class: {
