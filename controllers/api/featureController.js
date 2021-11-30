@@ -8,9 +8,11 @@ const router = require('express').Router();
 router.post('/:id', tokenAuth, async (req, res) => {
     try {
       const featureData = await Feature.create({
-        user_id: req.user.id,
-        blog_id: req.params.id,
-        body: req.body.description
+        character_id: req.params.id,
+        name: req.body.name,
+        type: req.body.type,
+        description: req.body.description,
+        user_id: req.user.id
       })
       res.status(200).json(featureData)
     } catch(err) {
@@ -22,7 +24,7 @@ router.post('/:id', tokenAuth, async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
       const featureData = await Feature.findByPk(req.params.id, {
-        include: [User, Character],
+        include: [Character],
       });
       if (!featureData) {
         res.status(404).json({ message: 'No Feature found with that id!' });

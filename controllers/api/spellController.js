@@ -8,9 +8,15 @@ const router = require('express').Router();
 router.post('/:id', tokenAuth, async (req, res) => {
     try {
       const spellData = await Spell.create({
-        user_id: req.user.id,
-        blog_id: req.params.id,
-        body: req.body.description
+        character_id: req.params.id,
+        name: req.body.name,
+        type: req.body.type,
+        level: req.body.level,
+        duration: req.body.duration,
+        range: req.body.range,
+        description: req.body.description,
+        attack: req.body.attack,
+        user_id: req.user.id
       })
       res.status(200).json(spellData)
     } catch(err) {
@@ -22,7 +28,7 @@ router.post('/:id', tokenAuth, async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
       const spellData = await Spell.findByPk(req.params.id, {
-        include: [User, Character],
+        include: [ Character ],
       });
       if (!spellData) {
         res.status(404).json({ message: 'No Spell found with that id!' });

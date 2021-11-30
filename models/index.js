@@ -46,8 +46,9 @@ const Spell = require("./Spell");
     })
 
 
-// CHARACTER INVENTORY AND STTTUUUUFFFFF
+// CHARACTER INVENTORY AND STUFF
     Character.hasOne(Inventory, {
+        // as: "charInventory",
         foreignKey: 'character_id'
     })
     Inventory.belongsTo(Character, {
@@ -55,6 +56,7 @@ const Spell = require("./Spell");
     })
 
     Character.hasOne(Feature, {
+        // as: "charFeature",
         foreignKey: 'character_id'
     })
     Feature.belongsTo(Character, {
@@ -62,6 +64,7 @@ const Spell = require("./Spell");
     }) 
 
     Character.hasOne(Proficiency, {
+        // as: "charProf",
         foreignKey: 'character_id'
     })
     Proficiency.belongsTo(Character, {
@@ -69,6 +72,7 @@ const Spell = require("./Spell");
     })
 
     Character.hasOne(Spell, {
+        // as: "charSpell",
         foreignKey: 'character_id'
     })
     Spell.belongsTo(Character, {

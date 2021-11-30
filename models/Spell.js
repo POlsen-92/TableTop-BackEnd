@@ -26,6 +26,10 @@ Spell.init({
     },
     attack: {
         type: DataTypes.INTEGER,
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
     }
 },{
     sequelize

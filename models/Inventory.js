@@ -12,14 +12,17 @@ Inventory.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    description: {
+        type: DataTypes.TEXT,
+    },
+    properties: {
+        type: DataTypes.STRING,
+    },
     cost: {
         type: DataTypes.INTEGER,
     },
     weight: {
         type: DataTypes.INTEGER,
-    },
-    description: {
-        type: DataTypes.TEXT,
     },
     armorClass: {
         type: DataTypes.INTEGER,
@@ -33,9 +36,10 @@ Inventory.init({
     damage: {
         type: DataTypes.INTEGER,
     },
-    properties: {
+    user_id: {
         type: DataTypes.INTEGER,
-    },
+        allowNull: false,
+    }
 },{
     sequelize
 });

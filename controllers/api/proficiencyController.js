@@ -8,9 +8,14 @@ const router = require('express').Router();
 router.post('/:id', tokenAuth, async (req, res) => {
     try {
       const proficiencyData = await Proficiency.create({
-        user_id: req.user.id,
-        blog_id: req.params.id,
-        body: req.body.description
+        character_id: req.params.id,
+        name: req.body.name,
+        type: req.body.type,
+        subType: req.body.subType,
+        ability: req.body.ability,
+        script: req.body.script,
+        typicalSpeakers: req.body.typicalSpeakers,
+        user_id: req.user.id
       })
       res.status(200).json(proficiencyData)
     } catch(err) {
@@ -22,7 +27,7 @@ router.post('/:id', tokenAuth, async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
       const proficiencyData = await Proficiency.findByPk(req.params.id, {
-        include: [User, Character],
+        include: [Character],
       });
       if (!proficiencyData) {
         res.status(404).json({ message: 'No Proficiency found with that id!' });

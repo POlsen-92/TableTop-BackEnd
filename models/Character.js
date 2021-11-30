@@ -9,16 +9,25 @@ Character.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        personality : {
+        personality: {
             type: DataTypes.TEXT,
-            default: 0
+            default: ''
+        },
+        age: {
+            type: DataTypes.INTEGER,
+            default: 1
         },
         race: {
             type: DataTypes.STRING,
+            default: '',
         },
         subRace: {
             type: DataTypes.STRING,
             default: '',
+        },
+        alignment: {
+            type: DataTypes.STRING,
+            default:'',
         },
         background: {
             type: DataTypes.STRING,
@@ -26,6 +35,7 @@ Character.init(
         },
         class: {
             type: DataTypes.STRING,
+            default: '',
         }, 
         subClass: {
             type: DataTypes.STRING,

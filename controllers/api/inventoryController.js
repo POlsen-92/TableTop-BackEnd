@@ -8,7 +8,18 @@ const router = require('express').Router();
 router.post('/:id', tokenAuth, async (req, res) => {
     try {
       const inventoryData = await Inventory.create({
-        user_id: req.user.id,
+        character_id: req.params.id,
+        name: req.body.name,
+        type: req.body.type,
+        description: req.body.description,
+        properties: req.body.properties,
+        cost: req.body.cost,
+        weight: req.body.weight,
+        armorClass: req.body.armorClass,
+        strength: req.body.strength,
+        stealth: req.body.stealth,
+        damage: req.body.damage,
+        user_id: req.user.id
       })
       res.status(200).json(inventoryData)
     } catch(err) {
@@ -20,7 +31,7 @@ router.post('/:id', tokenAuth, async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
       const inventoryData = await Inventory.findByPk(req.params.id, {
-        include: [User, Character],
+        include: [Character],
       });
       if (!inventoryData) {
         res.status(404).json({ message: 'No Inventory found with that id!' });
