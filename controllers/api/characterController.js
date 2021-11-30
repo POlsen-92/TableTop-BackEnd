@@ -89,6 +89,26 @@ router.get('/user:id', async (req, res) => {
   }
 });
 
+// GET ALL CHARACTERS IN ONE CAMPAIGN
+router.get('/camp:id', async (req, res) => {
+  try {
+    const characterData = await Character.findAll({
+      where: {
+        campaign_id: req.params.id
+      },
+      include: [User, Campaign, Inventory, Feature, Proficiency, Spell],
+    });
+    if (!characterData) {
+      res.status(404).json({ message: 'No Character found with that User!' });
+      return;
+    }
+
+    res.status(200).json(characterData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 //UPDATE CHARACTERS
 router.put('/update:id', tokenAuth, async (req, res) => {
   try {
