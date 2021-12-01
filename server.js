@@ -15,12 +15,12 @@ const PORT = process.env.PORT || 3001;
 const models = require("./models");
 
 //LOCAL
-app.use(cors());
+// app.use(cors());
 
 //DEPLOYED
-// app.use(cors({
-//     origin:["deployed URL"]
-// }))
+app.use(cors({
+    origin:["https://table-top-fe.herokuapp.com/"]
+}))
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
