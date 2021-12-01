@@ -19,7 +19,7 @@ const models = require("./models");
 
 //DEPLOYED
 app.use(cors({
-    origin:["https://table-top-fe.herokuapp.com/"]
+    origin:["https://table-top-fe.herokuapp.com"]
 }))
 
 app.use(express.urlencoded({ extended: true }));
