@@ -1,10 +1,9 @@
-const router = require('express').Router();
-const { Blog, User, Comment} = require('../../models');
+const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");const router = require('express').Router();
+const tokenAuth = require("../../middleware/tokenAuth");
 
-// The `http://localhost:3000/api/blogs` endpoint
+// The `http://localhost:3001/api/blog` endpoint
 
 // create a new Blog  
-
 
 // find all Blogs. be sure to include its associated User and Comments
 router.get('/', async (req, res) => {
@@ -12,7 +11,6 @@ router.get('/', async (req, res) => {
     const blogData = await Blog.findAll({
       include: [User, Comment],
     });
-    console.log("abnannananannana")
     res.status(200).json(blogData);
   } catch (err) {
     res.status(500).json(err);
@@ -23,30 +21,48 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const blogData = await Blog.findByPk(req.params.id, {
-      include: [User, Comment],
+      include: [User],
     });
-    
+    const commentData = await Comment.findAll({
+      where: {
+        blog_id: req.params.id
+      }, 
+      include: [ User ],
+    });
     if (!blogData) {
       res.status(404).json({ message: 'No Blog found with that id!' });
       return;
     }
-    
-    res.status(200).json(blogData);
+    res.status(200).json([blogData, commentData]);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
+// CREATE A BLOG BY TOKEN AUTH
+router.post('/', tokenAuth, async (req, res) => {
+  try {
+    const blogData = await Blog.create({
+      user_id: req.user.id,
+      title: req.body.title,
+      description: req.body.description
+    })
+    res.status(200).json(blogData)
+  } catch(err) {
+    res.status(400).json({ message: "an error occured", err: err });
+  };
+});
+
 // update a Blog by its `id` value 
-router.put('/:id', async (req, res) => {
+router.put('/:id', tokenAuth, async (req, res) => {
   try {
     const blogData = await Blog.update(req.body, {
       where: {
         id: req.params.id,
-        user_id: req.session.user.id
+        user_id: req.user.id
       },
     });
-    if (!blogData[0]) {
+    if (!blogData) {
       res.status(404).json({ message: 'No Blog with this id!' });
       return;
     }
@@ -57,16 +73,16 @@ router.put('/:id', async (req, res) => {
 });
 
 // delete a Blog by its `id` value 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', tokenAuth, async (req, res) => {
   try {
     const blogData = await Blog.destroy({
       where: {
         id: req.params.id,
-        user_id: req.session.user.id
+        user_id: req.user.id
       },
     });
     if (!blogData) {
-      res.status(404).json({ message: 'No Blog with this id!' });
+      res.status(404).json({ message: `You can't delete this!` });
       return;
     }
     res.status(200).json(blogData);
@@ -74,18 +90,6 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json(err);
   }
 });
-router.post('/:id', async (req, res) => {
-  try {
-      const blogData = await Blog.create({
-        title: req.body.title,
-        description: req.body.description,
-        UserId: req.params.id
-      })
-      res.status(200).json(blogData)
-    } catch(err) {
-        console.log(err);
-        res.status(400).json({ message: "an error occured", err: err });
-      };
-  });
+
 
 module.exports = router;

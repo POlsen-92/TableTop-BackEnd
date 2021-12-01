@@ -1,30 +1,28 @@
+const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");
+const tokenAuth = require("../../middleware/tokenAuth");
 const router = require('express').Router();
-const { Comment, Blog, User} = require('../../models');
 
-// The `http://localhost:3000/api/comments` endpoint
+// The `http://localhost:3001/api/comment` endpoint
 
 // create a new Comment 
-router.post('/', async (req, res) => {
+router.post('/:id', tokenAuth, async (req, res) => {
   try {
     const commentData = await Comment.create({
-      name: req.session.user.name,
-      description: req.body.description,
-      blog_id: req.body.blogid,
-      user_id: req.session.user.id
+      user_id: req.user.id,
+      blog_id: req.params.id,
+      body: req.body.description
     })
     res.status(200).json(commentData)
-    console.log('it worked')
   } catch(err) {
-      console.log(err);
       res.status(400).json({ message: "an error occured", err: err });
     };
 });
 
-// find all Comments. be sure to include its associated Blogs
+// find all Comments. be sure to include its associated Users and Blogs
 router.get('/', async (req, res) => {
   try {
     const commentData = await Comment.findAll({
-      include: [Blog],
+      include: [User, Blog],
     });
     res.status(200).json(commentData);
   } catch (err) {
@@ -32,18 +30,16 @@ router.get('/', async (req, res) => {
   }
 });
 
-// find one Comment by its `id` value. be sure to include its associated Comments
+// find one Comment by its `id` value. be sure to include its associated Users and Blogs
 router.get('/:id', async (req, res) => {
   try {
     const commentData = await Comment.findByPk(req.params.id, {
-      include: [Blog],
+      include: [User, Blog],
     });
-
     if (!commentData) {
       res.status(404).json({ message: 'No Comment found with that id!' });
       return;
     }
-
     res.status(200).json(commentData);
   } catch (err) {
     res.status(500).json(err);
@@ -51,15 +47,15 @@ router.get('/:id', async (req, res) => {
 });
 
 // update a Comment by its `id` value 
-router.put('/:id', async (req, res) => {
+router.put('/:id', tokenAuth, async (req, res) => {
   try {
     const commentData = await Comment.update(req.body, {
       where: {
         id: req.params.id,
-        user_id: req.session.user.id
+        user_id: req.user.id
       },
     });
-    if (!commentData[0]) {
+    if (!commentData) {
       res.status(404).json({ message: 'No Comment with this id!' });
       return;
     }
@@ -70,12 +66,12 @@ router.put('/:id', async (req, res) => {
 });
 
 // delete a Comment by its `id` value 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', tokenAuth, async (req, res) => {
   try {
     const commentData = await Comment.destroy({
       where: {
         id: req.params.id,
-        user_id: req.session.user.id
+        user_id: req.user.id
       },
     });
     if (!commentData) {
