@@ -47,7 +47,7 @@ const Spell = require("./Spell");
 
 
 // CHARACTER INVENTORY AND STUFF
-    Character.hasOne(Inventory, {
+    Character.hasMany(Inventory, {
         // as: "charInventory",
         foreignKey: 'character_id'
     })
@@ -55,7 +55,7 @@ const Spell = require("./Spell");
         foreignKey: 'character_id'
     })
 
-    Character.hasOne(Feature, {
+    Character.hasMany(Feature, {
         // as: "charFeature",
         foreignKey: 'character_id'
     })
@@ -63,7 +63,7 @@ const Spell = require("./Spell");
         foreignKey: 'character_id'
     }) 
 
-    Character.hasOne(Proficiency, {
+    Character.hasMany(Proficiency, {
         // as: "charProf",
         foreignKey: 'character_id'
     })
@@ -71,7 +71,7 @@ const Spell = require("./Spell");
         foreignKey: 'character_id'
     })
 
-    Character.hasOne(Spell, {
+    Character.hasMany(Spell, {
         // as: "charSpell",
         foreignKey: 'character_id'
     })

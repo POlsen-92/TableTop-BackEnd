@@ -56,7 +56,8 @@ router.get('/', async (req, res) => {
 // GET A CHARACTER BY ID
 router.get('/id:id', async (req, res) => {
   try {
-    const characterData = await Character.findByPk(req.params.id, {
+    const characterData = await Character.findOne({
+      where: {id:req.params.id},
       include: [User, Campaign, Inventory, Feature, Proficiency, Spell],
     });
     if (!characterData) {
