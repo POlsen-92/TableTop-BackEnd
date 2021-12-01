@@ -113,7 +113,7 @@ router.get("/", tokenAuth, async (req, res) => {
 });
 
 // FIND A SINGLE USER USING ID
-router.get("/id:id", tokenAuth, async (req, res) => {
+router.get("/id:id", async (req, res) => {
   try {
     const userData = await User.findOne({
       where: {id:req.params.id},
