@@ -9,7 +9,7 @@ const Invite = require("./Invite");
 const Feature = require("./Feature");
 const Proficiency = require("./Proficiency");
 const Spell = require("./Spell");
-
+const Token = require("./Token");
 
 //GAMEPLAY CONNECTIONS
     User.belongsToMany(Campaign, {
@@ -118,5 +118,12 @@ const Spell = require("./Spell");
         foreignKey: 'user_id'
     });
 
-
-module.exports = {User, Campaign, Character, UserCampaign, Blog, Comment, Invite, Inventory, Feature, Proficiency, Spell};
+// TOKEN CONNECTIONS
+    Campaign.hasMany(Token,{
+        foreignKey: 'campaign_id'
+    });
+    Token.belongsTo(Campaign, {
+        foreignKey: 'campaign_id'
+    });
+        
+module.exports = {User, Campaign, Character, UserCampaign, Blog, Comment, Invite, Inventory, Feature, Proficiency, Spell,Token};
