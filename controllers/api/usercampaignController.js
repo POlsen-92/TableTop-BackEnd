@@ -57,6 +57,7 @@ router.delete("/userdel:id", tokenAuth, (req, res) => {
 
 // DELETE USER FROM CAMPAIGN - By GM 
 router.delete("/gmdel:id", tokenAuth, (req, res) => {
+  console.log("req",req);
   Campaign.findOne({
     where: {
       id: req.params.id,
@@ -67,7 +68,7 @@ router.delete("/gmdel:id", tokenAuth, (req, res) => {
       UserCampaign.destroy({
         where: {
           campaign_id: req.params.id,
-          user_id: req.body.id
+          user_id: req.body.user_id
         },
       })
       .then((delUserCampaign) => {
