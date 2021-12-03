@@ -4,16 +4,18 @@ const tokenAuth = require("../../middleware/tokenAuth");
 // The `http://localhost:3001/api/token` endpoint
 
 
-// FIND ALL TOKENS BY CAMPAIGN
+// CREATE TOKEN BY CAMPAIGN ID 
 
 router.post('/camp:id',  async (req, res) => {
     try {
       const tokenData = await Token.create({
+        id:req.body.id,
         name: req.body.name,
-        token_id: req.body.id,
+        token_id: req.body.token_id,
         x: req.body.x,
         y: req.body.y,
-        campaign_id: req.params.id
+        campaign_id: req.params.id,
+        
       })
       res.status(200).json(tokenData)
     } catch(err) {
@@ -50,5 +52,23 @@ router.put('/camp:id', async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// DELETE ALL TOKENS BY CAMPAIGN
+router.delete('/camp:id', async (req, res) => {
+    try {
+      const tokenData = await Token.destroy({
+        where: {
+            campaign_id: req.params.id,
+        },
+      });
+      if (!tokenData) {
+        res.status(404).json({ message: 'Tokens all deleted!' });
+        return;
+      }
+      res.status(200).json(campaignData);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 
 module.exports = router;
