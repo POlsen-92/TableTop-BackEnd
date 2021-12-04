@@ -44,7 +44,7 @@ router.put('/camp:id', async (req, res) => {
     const tokenData = await Token.update(req.body, {
       where: {
         campaign_id: req.params.id,
-        token_id: req.body.id
+        token_id: req.body.token_id
       },
     });
     res.status(200).json(tokenData);
