@@ -65,10 +65,29 @@ router.delete('/camp:id', async (req, res) => {
         res.status(404).json({ message: 'Tokens all deleted!' });
         return;
       }
-      res.status(200).json(campaignData);
+      res.status(200).json(tokenData);
     } catch (err) {
       res.status(500).json(err);
     }
   });
 
+
+  // DELETE one TOKEN BY  Token_id
+router.delete('/deleteone/camp:id', async (req, res) => {
+    try {
+      const tokenData = await Token.destroy({
+        where: {
+            campaign_id: req.params.id,
+            token_id: req.body.token_id
+        },
+      });
+      if (!tokenData) {
+        res.status(404).json({ message: 'Couldnt delete token!' });
+        return;
+      }
+      res.status(200).json(tokenData);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 module.exports = router;
