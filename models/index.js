@@ -9,7 +9,7 @@ const Invite = require("./Invite");
 const Feature = require("./Feature");
 const Proficiency = require("./Proficiency");
 const Spell = require("./Spell");
-
+const Token = require("./Token");
 
 //GAMEPLAY CONNECTIONS
     User.belongsToMany(Campaign, {
@@ -47,7 +47,7 @@ const Spell = require("./Spell");
 
 
 // CHARACTER INVENTORY AND STUFF
-    Character.hasOne(Inventory, {
+    Character.hasMany(Inventory, {
         // as: "charInventory",
         foreignKey: 'character_id'
     })
@@ -55,7 +55,7 @@ const Spell = require("./Spell");
         foreignKey: 'character_id'
     })
 
-    Character.hasOne(Feature, {
+    Character.hasMany(Feature, {
         // as: "charFeature",
         foreignKey: 'character_id'
     })
@@ -63,7 +63,7 @@ const Spell = require("./Spell");
         foreignKey: 'character_id'
     }) 
 
-    Character.hasOne(Proficiency, {
+    Character.hasMany(Proficiency, {
         // as: "charProf",
         foreignKey: 'character_id'
     })
@@ -71,7 +71,7 @@ const Spell = require("./Spell");
         foreignKey: 'character_id'
     })
 
-    Character.hasOne(Spell, {
+    Character.hasMany(Spell, {
         // as: "charSpell",
         foreignKey: 'character_id'
     })
@@ -118,5 +118,12 @@ const Spell = require("./Spell");
         foreignKey: 'user_id'
     });
 
-
-module.exports = {User, Campaign, Character, UserCampaign, Blog, Comment, Invite, Inventory, Feature, Proficiency, Spell};
+// TOKEN CONNECTIONS
+    Campaign.hasMany(Token,{
+        foreignKey: 'campaign_id'
+    });
+    Token.belongsTo(Campaign, {
+        foreignKey: 'campaign_id'
+    });
+        
+module.exports = {User, Campaign, Character, UserCampaign, Blog, Comment, Invite, Inventory, Feature, Proficiency, Spell,Token};

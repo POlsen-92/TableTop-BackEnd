@@ -16,6 +16,7 @@ const tokenAuth = function(req,res,next){
             }
         })
     } else {
+        console.log("bad");
         return res.status(403).send("include your token")
     }
 }

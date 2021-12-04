@@ -14,11 +14,11 @@ router.post('/camp:id', tokenAuth, async (req, res) => {
       personality: req.body.personality,
       age: req.body.age,
       race: req.body.race,
-      subRace: req.body.subrace,
+      subRace: req.body.subRace,
       alignment: req.body.alignment,
       background: req.body.background,
       class: req.body.class,
-      subClass: req.body.subclass,
+      subClass: req.body.subClass,
       level: req.body.level,
       image_content: req.body.picture,
       strength: req.body.strength,
@@ -56,7 +56,8 @@ router.get('/', async (req, res) => {
 // GET A CHARACTER BY ID
 router.get('/id:id', async (req, res) => {
   try {
-    const characterData = await Character.findByPk(req.params.id, {
+    const characterData = await Character.findOne({
+      where: {id:req.params.id},
       include: [User, Campaign, Inventory, Feature, Proficiency, Spell],
     });
     if (!characterData) {

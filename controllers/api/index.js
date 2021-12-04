@@ -36,4 +36,8 @@ router.use("/blog",blogRoutes);
 const commentRoutes = require("./commentController");
 router.use("/comment",commentRoutes);
 
+const tokenRoutes = require("./tokenController");
+router.use("/token",tokenRoutes);
+
+
 module.exports = router;
