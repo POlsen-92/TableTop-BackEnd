@@ -14,8 +14,8 @@ router.post('/camp:id',  async (req, res) => {
         token_id: req.body.token_id,
         x: req.body.x,
         y: req.body.y,
+        image: req.body.image,
         campaign_id: req.params.id,
-        
       })
       res.status(200).json(tokenData)
     } catch(err) {
