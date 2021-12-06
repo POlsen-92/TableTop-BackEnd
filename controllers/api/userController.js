@@ -54,9 +54,9 @@ router.post("/login", (req, res) => {
           id: foundUser.id,
         },
         process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
+        // {
+        //   expiresIn: "2h",
+        // }
       );
       res.json({
         token: token,
