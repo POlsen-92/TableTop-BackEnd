@@ -11,6 +11,10 @@ Blog.init({
     description: {
         type: DataTypes.TEXT,
         allowNull: false
+    },
+    author_image: {
+        type: DataTypes.TEXT,
+        default: 'https://avatars.dicebear.com/api/pixel-art/sdfsdfsdfsdfsdfs.svg'
     }   
 },{
     sequelize

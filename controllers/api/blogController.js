@@ -45,7 +45,8 @@ router.post('/', tokenAuth, async (req, res) => {
     const blogData = await Blog.create({
       user_id: req.user.id,
       title: req.body.title,
-      description: req.body.description
+      description: req.body.description,
+      author_image: req.body.author_image
     })
     res.status(200).json(blogData)
   } catch(err) {
