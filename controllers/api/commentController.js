@@ -1,4 +1,4 @@
-const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");
+const { User, Blog, Comment } = require("../../models");
 const tokenAuth = require("../../middleware/tokenAuth");
 const router = require('express').Router();
 
