@@ -1,4 +1,4 @@
-const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");
+const { User, Campaign, Character, Inventory, Feature, Proficiency, Spell } = require("../../models");
 const router = require('express').Router();
 const tokenAuth = require("../../middleware/tokenAuth");
 
@@ -83,7 +83,6 @@ router.get('/user:id', async (req, res) => {
       res.status(404).json({ message: 'No Character found with that User!' });
       return;
     }
-
     res.status(200).json(characterData);
   } catch (err) {
     res.status(500).json(err);

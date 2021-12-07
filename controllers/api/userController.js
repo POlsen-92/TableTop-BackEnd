@@ -1,4 +1,4 @@
-const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");
+const { User, Campaign, Character, Blog, Comment, Invite } = require("../../models");
 const tokenAuth = require("../../middleware/tokenAuth");
 const router = require('express').Router();
 const jwt = require("jsonwebtoken");
@@ -54,9 +54,6 @@ router.post("/login", (req, res) => {
           id: foundUser.id,
         },
         process.env.TOKEN_KEY,
-        // {
-        //   expiresIn: "2h",
-        // }
       );
       res.json({
         token: token,
@@ -96,11 +93,6 @@ router.get("/", tokenAuth, async (req, res) => {
     const userData = await User.findByPk(req.user.id, {
       include: [Campaign, Character, Blog, Comment, Invite],
     });
-    // const campaignData = await Campaign.findAll({
-    //   where: {
-    //     gm_id: req.user.id
-    //   }
-    // });
     if (!userData) {
       res.status(404).json({ message: "No User found" });
       return;
@@ -163,7 +155,7 @@ router.get("/game:id", async (req, res) => {
     const userData = await User.findByPk(req.params.id, {
       include: [Campaign, Character ],
     });
-    const campaignData = await Campaign.findAll({ //TODO: MAY ALSO CAUSE ISSUES IF USED
+    const campaignData = await Campaign.findAll({ 
       where: {
         gm_id: req.params.id
       }

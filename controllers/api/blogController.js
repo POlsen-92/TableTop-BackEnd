@@ -1,11 +1,25 @@
-const { User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");const router = require('express').Router();
+const { User, Blog, Comment } = require("../../models");
+const router = require('express').Router();
 const tokenAuth = require("../../middleware/tokenAuth");
 
 // The `http://localhost:3001/api/blog` endpoint
 
-// create a new Blog  
 
-// find all Blogs. be sure to include its associated User and Comments
+// CREATE A BLOG BY TOKEN AUTH
+router.post('/', tokenAuth, async (req, res) => {
+  try {
+    const blogData = await Blog.create({
+      user_id: req.user.id,
+      title: req.body.title,
+      description: req.body.description
+    })
+    res.status(200).json(blogData)
+  } catch(err) {
+    res.status(400).json({ message: "an error occured", err: err });
+  };
+});
+
+// FIND ALL BLOGS. be sure to include its associated User and Comments
 router.get('/', async (req, res) => {
   try {
     const blogData = await Blog.findAll({
@@ -17,7 +31,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// find one Blog by its `id` value. be sure to include its associated User and Comments
+// FIND ONE BLOG by its `id` value. be sure to include its associated User and Comments
 router.get('/:id', async (req, res) => {
   try {
     const blogData = await Blog.findByPk(req.params.id, {
@@ -39,21 +53,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// CREATE A BLOG BY TOKEN AUTH
-router.post('/', tokenAuth, async (req, res) => {
-  try {
-    const blogData = await Blog.create({
-      user_id: req.user.id,
-      title: req.body.title,
-      description: req.body.description
-    })
-    res.status(200).json(blogData)
-  } catch(err) {
-    res.status(400).json({ message: "an error occured", err: err });
-  };
-});
-
-// update a Blog by its `id` value 
+// UPDATE BLOG BY ID VALUE
 router.put('/:id', tokenAuth, async (req, res) => {
   try {
     const blogData = await Blog.update(req.body, {
@@ -72,7 +72,7 @@ router.put('/:id', tokenAuth, async (req, res) => {
   }
 });
 
-// delete a Blog by its `id` value 
+// DELETE BLOG by its `id` value 
 router.delete('/:id', tokenAuth, async (req, res) => {
   try {
     const blogData = await Blog.destroy({

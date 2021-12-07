@@ -8,7 +8,7 @@ exports = module.exports = function (io) {
         });
         
         socket.on('msg sending', (socketObj)=>{
-            console.log("cool beans", socketObj);
+            console.log("message sent", socketObj);
             const chatObj = {user:socketObj.user, content:socketObj.content}
             socket.to(socketObj.id).emit('msg delivering',chatObj);
         });

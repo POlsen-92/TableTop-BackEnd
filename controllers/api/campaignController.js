@@ -1,4 +1,5 @@
-const { Token, User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");const router = require('express').Router();
+const { Token, User, Campaign, Character, UserCampaign } = require("../../models");
+const router = require('express').Router();
 const tokenAuth = require("../../middleware/tokenAuth");
 
 // The `http://localhost:3001/api/campaign` endpoint
@@ -62,7 +63,7 @@ router.get('/gm', tokenAuth, async (req, res) => {
 router.get('/id:id', async (req, res) => {
   try {
     const campaignData = await Campaign.findByPk(req.params.id, {
-      include: [User, Character,Token],
+      include: [User, Character, Token],
     });
     if (!campaignData) {
       res.status(404).json({ message: 'No Campaign found!' });

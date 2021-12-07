@@ -126,4 +126,4 @@ const Token = require("./Token");
         foreignKey: 'campaign_id'
     });
         
-module.exports = {User, Campaign, Character, UserCampaign, Blog, Comment, Invite, Inventory, Feature, Proficiency, Spell,Token};
+module.exports = {User, Campaign, Character, UserCampaign, Blog, Comment, Invite, Inventory, Feature, Proficiency, Spell, Token};
