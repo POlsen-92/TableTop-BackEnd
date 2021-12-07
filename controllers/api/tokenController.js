@@ -1,5 +1,5 @@
-const { Token, User, Campaign, Character, Blog, Comment, UserCampaign, Invite, Inventory, Feature, Proficiency, Spell } = require("../../models");const router = require('express').Router();
-const tokenAuth = require("../../middleware/tokenAuth");
+const { Token } = require("../../models");
+const router = require('express').Router();
 
 // The `http://localhost:3001/api/token` endpoint
 
