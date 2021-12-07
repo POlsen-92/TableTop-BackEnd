@@ -20,7 +20,7 @@ router.post('/', tokenAuth, async (req, res) => {
 });
 
 // FIND ALL BLOGS. be sure to include its associated User and Comments
-router.get('/', async (res) => {
+router.get('/', async (req, res) => {
   try {
     const blogData = await Blog.findAll({
       include: [User, Comment],
