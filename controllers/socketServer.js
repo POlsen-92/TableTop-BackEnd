@@ -7,10 +7,10 @@ exports = module.exports = function (io) {
             console.log("joining the campaign room", id);
         });
         
-        socket.on('sending chat msg', (socketObj)=>{
+        socket.on('msg sending', (socketObj)=>{
             console.log("cool beans", socketObj);
-            const chatObj = {name:socketObj.name, content:socketObj.content}
-            io.sockets.in(socketObj.id).emit('chat msg sent',chatObj);
+            const chatObj = {user:socketObj.user, content:socketObj.content}
+            socket.to(socketObj.id).emit('msg delivering',chatObj);
         });
     });
 }
